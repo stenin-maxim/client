@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+.header-top {
+    background-color: $black;
+    color: $white;
+    padding: 10px 0;
+    .logo {
+        font-size: 25px;
+        color: $white;
+    }
+    .login {
+        color: $white;
+        &:hover {
+            color: $blue;
+        }
+    }
+    .fa-heart, .fa-cart-shopping {
+        font-size: 21px;
+        color: $gray-1;
+        cursor: pointer;
+        position: relative;
+        top: 2px;
+        &:hover {
+            color: $gray-2;
+        }
+    }
+}
+
+.category {
+    a {
+        color: $black;
+    }
+    .img-category {
+        width: 100%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
