@@ -1,36 +1,4 @@
-body {
-    margin: 0;
-}
-
-a {
-    text-decoration: none;
-}
-
-.header-top {
-    background-color: $black;
-    color: $white;
-    padding: 10px 0;
-    .logo {
-        font-size: 25px;
-        color: $white;
-    }
-    .login {
-        color: $white;
-        &:hover {
-            color: $blue;
-        }
-    }
-    .fa-heart, .fa-cart-shopping {
-        font-size: 21px;
-        color: $gray-1;
-        cursor: pointer;
-        position: relative;
-        top: 2px;
-        &:hover {
-            color: $gray-2;
-        }
-    }
-}
+@use 'variables' as *;
 
 .category {
     a {
@@ -38,6 +6,58 @@ a {
     }
     .img-category {
         width: 100%;
+    }
+}
+
+
+.block-ad {
+    width: 217px;
+    background: $white;
+    box-shadow: rgba(0, 0, 0, 0.04) 0px 2px 4px 0px;
+    position: relative;
+    color: $black;
+    border-radius: 7px;
+    a {
+        color: $black;
+    }
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 7px 7px 0 0;
+    }
+    .location {
+        color: $white;
+        position: absolute;
+        bottom: 100px;
+        left: 15px;
+        background: rgb(0 0 0 / 40%);
+        padding: 3px 8px;
+        border-radius: 5px;
+    }
+    .bi-heart {
+        position: absolute;
+        right: 16px;
+        background: white;
+        padding: 3px 8px;
+        border-radius: 21px;
+        font-size: 20px;
+        bottom: 70px;
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+    .title {
+        padding: 0 10px 15px;
+        font-size: 18px;
+    }
+    .price {
+        font-weight: 600;
+        margin: 14px 10px 0;
+        font-size: 21px;
+        font-family: "Fira Sans", sans-serif;
+        &:after {
+            content: ' \20BD';
+        }
     }
 }
 

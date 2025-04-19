@@ -1,0 +1,75 @@
+@use 'variables' as *;
+
+.header-top {
+    background-color: $black;
+    color: $white;
+    padding: 10px 0;
+
+    &-left, &-right {
+    	display: flex;
+    	align-items: center;
+    	height: 34px;
+    }
+    &-left {
+    	justify-content: left;
+    }
+    &-right {
+    	justify-content: right;
+    }
+    .icon-text {
+    	margin: 15px;
+    	text-decoration: underline;
+    	&:hover {
+    		color: $pink;
+    	}
+    	span {
+    		margin-left: 5px;
+    		font-size: 14px;
+
+    	}
+    }
+    .auth {
+    	margin-left: 15px;
+    	border-left: 1px solid $white;
+  		padding-left: 15px;
+    	.login {
+	        color: $white;
+	        margin-right: 20px;
+	        color: $pink;
+	    }
+	    a {
+	    	text-decoration: none;
+	    	font-weight: 600;
+	    	color: $white;
+	    	&:hover {
+	            text-decoration: underline;
+	        }
+	    }
+    }
+    .logo {
+        font-size: 25px;
+        color: $white;
+        text-decoration: none;
+        margin-right: 15px;
+    }
+    .location {
+    	position: relative;
+    	top: 2px;
+    	font-size: 15px;
+    	font-weight: 600;
+    	cursor: pointer;
+    }
+    .bi-geo-alt {
+		margin: 0 5px;
+	}
+    .fa-heart, .fa-cart-shopping {
+        font-size: 21px;
+        color: $gray-1;
+        cursor: pointer;
+        position: relative;
+        top: 2px;
+        &:hover {
+            color: $gray-2;
+        }
+    }
+}
