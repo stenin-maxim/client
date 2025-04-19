@@ -45,13 +45,14 @@ function App() {
                     <div className="container">
                         <div className="row">
                             <div className="col-12">
-                                <div className="d-flex">
-                                    <button className="">Все категории</button>
-                                    <form action="" className="d-flex flex-grow-1">
-                                        <input type="text" className="form-control" placeholder="Поиск по обьявлениям"/>
-                                        <input type="submit" value="Найти" className="btn btn-primary px-5"/>
+                                <div className="d-flex justify-content-center">
+                                    <button className="btn-category">Категории</button>
+                                    <form action="" className="search d-flex flex-grow-1">
+                                        <i className="bi bi-search"></i>
+                                        <input type="text" className="search-input" placeholder="Поиск по обьявлениям"/>
+                                        <input type="submit" value="Найти" className="btn-search"/>
                                     </form>
-                                    <button className="">Разместить обьявление</button>
+                                    <button className="btn-ad">Разместить обьявление</button>
                                 </div>
                             </div>
                         </div>

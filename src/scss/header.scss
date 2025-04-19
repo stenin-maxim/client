@@ -73,3 +73,50 @@
         }
     }
 }
+
+.header-bottom {
+    margin: 20px 0;
+	.btn-category {
+		background: $pink;
+        padding: 10px 20px;
+        border: none;
+        color: #fff;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+	}
+	.bi-search {
+		position: relative;
+		top: 10px;
+		left: 28px;
+	}
+    .search {
+        margin-left: 40px;
+        &-input {
+            border-radius: 5px;
+            border: none;
+            background: #f1f1f1;
+            padding: 12px 10px 12px 34px;
+            width: 60%;
+            font-size: 15px;
+        }
+    }
+    .btn-search {
+        border: none;
+        cursor: pointer;
+        font-size: 15px;
+        border-radius: 0 5px 5px 0;
+        padding: 10px 45px;
+    }
+
+    .btn-ad {
+        background: $green;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 15px;
+    }
+}
