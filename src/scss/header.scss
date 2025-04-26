@@ -19,6 +19,7 @@
     .icon-text {
     	margin: 15px;
     	text-decoration: underline;
+        color: $white;
     	&:hover {
     		color: $pink;
     	}
@@ -37,10 +38,14 @@
 	        margin-right: 20px;
 	        color: $pink;
 	    }
-	    a {
+	    button {
 	    	text-decoration: none;
 	    	font-weight: 600;
 	    	color: $white;
+            border: none;
+            background: none;
+            font-size: 15px;
+            cursor: pointer;
 	    	&:hover {
 	            text-decoration: underline;
 	        }
@@ -120,3 +125,77 @@
         font-size: 15px;
     }
 }
+
+.ReactModal {
+    position: relative;
+    top: 30%;
+    left: 25%;
+    .modal {
+        background-color: white;
+        padding: 30px 40px;
+        border-radius: 5px;
+        width: 500px;
+        position: relative;
+    }
+    &-overlay {
+        position: fixed;
+        inset:0px;
+        background-color: rgba(0, 0, 0, 0.75);
+    }
+    .bi-x-lg {
+        position: absolute;
+        right: -26px;
+        color: white;
+        top: -32px;
+        font-size: 25px;
+        cursor: pointer;
+    }
+    h2 {
+        text-align: center;
+    }
+    .form {
+        .input-control {
+            width: 95%;
+            padding: 10px;
+            font-size: 15px;
+            border-radius: 5px;
+            border: 1px solid $gray-1;
+            margin-top: 10px;
+        }
+        button {
+            padding: 8px 30px;
+            border: none;
+            margin: 15px 0 0;
+            background: $pink;
+            color: $white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 15px;
+        }
+    }
+    .form-check label {
+        margin-left: 7px;
+        cursor: pointer;
+    }
+    .modal-footer {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        button {
+            border: none;
+            cursor: pointer;
+            background: none;
+            text-decoration: underline;
+            color: $pink;
+            font-size: 14px;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+    .forget-password {
+        margin-bottom: 10px;
+    }
+}
+

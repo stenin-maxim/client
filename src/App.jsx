@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Route, Routes } from 'react-router'
+import ReactModal from 'react-modal';
 import Login from './components/Login';
-import Registr from './components/Registr';
+// import Registr from './components/Registr';
 import Home from './components/Home';
 import Ad from './components/Ad';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
@@ -11,6 +12,15 @@ import './scss/app.scss';
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [email, setEmail] = useState('');
+    const [modalIsOpenRegistr, setModalIsOpenRegistr] = useState(false);
+
+    function openModalRegistr() {
+        setModalIsOpenRegistr(true);
+    };
+
+    function closeModalRegistr() {
+        setModalIsOpenRegistr(false);
+    };
 
     return (
         <>
@@ -33,8 +43,14 @@ function App() {
                                     <a href="" className="icon-text"><i className="bi bi-chat-fill" title="Сообщения"></i><span>Сообщения</span></a>
                                     <a href="" className="icon-text"><i className="bi bi-bell-fill" title="Уведомления"></i><span>Уведомления</span></a>
                                     <div className="auth">
-                                        <a href="/login" className="login">Вход</a>
-                                        <a href="/registr" className="registr">Регистрация</a>
+                                        <Login />   
+                                        <button onClick={openModalRegistr} className="registr">Регистрация</button>
+                                        <ReactModal className="ReactModal" overlayClassName="ReactModal-overlay" isOpen={modalIsOpenRegistr} onRequestClose={closeModalRegistr}>
+                                            <div className="container">
+                                                <div className="row">
+                                                </div>
+                                            </div>
+                                        </ReactModal>
                                     </div>
                                 </div>
                             </div>
@@ -62,8 +78,8 @@ function App() {
             <main>
                 <Routes>
                     <Route path="/" element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
-                    <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
-                    <Route path="/registr" element={<Registr />} />
+                    {/* <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} /> */}
+                    {/* <Route path="/registr" element={<Registr />} /> */}
                     <Route path="/ad">
                         <Route path=":id" element={<Ad />} />
                     </Route>
