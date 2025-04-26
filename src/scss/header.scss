@@ -101,7 +101,7 @@
         &-input {
             border-radius: 5px;
             border: none;
-            background: #f1f1f1;
+            background: $gray-3;
             padding: 12px 10px 12px 34px;
             width: 60%;
             font-size: 15px;
@@ -128,7 +128,7 @@
 
 .ReactModal {
     position: relative;
-    top: 30%;
+    top: 20%;
     left: 25%;
     .modal {
         background-color: white;
@@ -152,15 +152,17 @@
     }
     h2 {
         text-align: center;
+        margin: 10px 0 5px;
     }
     .form {
-        .input-control {
+        &-control {
             width: 95%;
             padding: 10px;
             font-size: 15px;
             border-radius: 5px;
-            border: 1px solid $gray-1;
-            margin-top: 10px;
+            border: 1px solid $gray-2;
+            margin-top: 5px;
+            background: $gray-3;
         }
         button {
             padding: 8px 30px;
@@ -196,6 +198,9 @@
     }
     .forget-password {
         margin-bottom: 10px;
+    }
+    #password-help {
+        font-size: 12px;
     }
 }
 
