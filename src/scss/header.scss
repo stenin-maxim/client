@@ -82,6 +82,12 @@
 .header-bottom {
     margin: 20px 0;
     position: relative;
+    .bi-list {
+        font-size: 18px;
+        padding-right: 9px;
+        position: relative;
+        top: 1px;
+    }
 	.btn-category {
 		background: $pink;
         padding: 10px 20px;
@@ -103,7 +109,7 @@
             background-repeat: no-repeat;
             background-position: 16px 8px;
             background-size: 24px;
-            padding: 8px 16px 8px 52px;
+            padding: 8px 22px 8px 52px;
             cursor: pointer;
             width: 180px;
             &:hover {
@@ -134,10 +140,10 @@
     .subcategory {
         display: none;
         position: absolute;
-        right: 0;
         top: 3px;
-        left: 310px;
+        left: 260px;
         height: 100%;
+        padding-left: 50px !important;
         li {
             padding: 5px 5px 5px 20px;
         }
@@ -182,8 +188,31 @@
 
 .ReactModal {
     position: relative;
-    top: 20%;
-    left: 25%;
+    top: 15%;
+    left: 36%;
+    width: 500px;
+    &__Overlay {
+        z-index: 2;
+    }
+    &-location {
+        left: 28%;
+    }
+    .modal-location {
+        background-color: white;
+        padding: 30px 40px;
+        border-radius: 5px;
+        width: 700px;
+        position: relative;
+        .city {
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+        .all-russ {
+            margin-top: 15px;
+        }
+    }
     .modal {
         background-color: white;
         padding: 30px 40px;
@@ -206,7 +235,7 @@
     }
     h2 {
         text-align: center;
-        margin: 10px 0 5px;
+        margin: 10px 0 20px;
     }
     .form {
         &-control {
