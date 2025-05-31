@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
-import categories from "../../public/categories.json";
+import categories from "../assets/categories.json";
 
 export default function Menu() {
     const [isShow, setIsShow] = useState(false);
@@ -19,15 +19,15 @@ export default function Menu() {
     }
 
 
-    let listCategory = categories["Вещи, электроника и прочее"].map((item, index) => {
+    let listCategory = categories["Вещи, электроника и прочее"].map((item) => {
         return (
-            <ul key={index}>
+            <ul key={item.category}>
                 <li className='category-item' onMouseEnter={showSubcategory} style={{backgroundImage: "url(" + item.img + ")"}}>
                     <Link to="">{item.category}</Link>
                     <ul className="subcategory">
                         <h4>{item.category}</h4>
-                        {item.subcategory.map((item2, index2) =>
-                            <li key={index2}>
+                        {item.subcategory.map((item2) =>
+                            <li key={item2}>
                                 <Link to="">{item2}</Link>
                             </li>
                         )}
@@ -39,7 +39,7 @@ export default function Menu() {
 
     return (
         <>
-            <button className="btn-category" onClick={toggle}>Категории</button>
+            <button className="btn-category" onClick={toggle}><i className="bi bi-list"></i>Категории</button>
                 {isShow &&
                 <div className="category">
                     <div className='container'>

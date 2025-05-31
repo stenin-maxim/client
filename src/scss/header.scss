@@ -188,7 +188,7 @@
 
 .ReactModal {
     position: relative;
-    top: 15%;
+    top: 12%;
     left: 36%;
     width: 500px;
     &__Overlay {
@@ -257,6 +257,10 @@
             cursor: pointer;
             text-decoration: none;
             font-size: 15px;
+        }
+        .err {
+            color: red;
+            font-size: 14px;
         }
     }
     .form-check label {

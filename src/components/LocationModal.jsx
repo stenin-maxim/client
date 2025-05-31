@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ReactModal from 'react-modal';
-import cities from "../../public/cities.json";
+import cities from "../assets/cities.json";
 
 export default function LocationModal() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -29,7 +29,7 @@ export default function LocationModal() {
                                 {cities.cities.map((item, index) => {
                                     if (index < 24) {
                                         return (
-                                            <div key={index}><span className="city" onClick={checkedLocation}>{item}</span></div>
+                                            <div key={item}><span className="city" onClick={checkedLocation}>{item}</span></div>
                                         )
                                     } 
                                 })}
@@ -38,7 +38,7 @@ export default function LocationModal() {
                                 {cities.cities.map((item, index) => {
                                     if (index >= 24 && index < 48) {
                                         return (
-                                            <div key={index}><span className="city" onClick={checkedLocation}>{item}</span></div>
+                                            <div key={item}><span className="city" onClick={checkedLocation}>{item}</span></div>
                                         )
                                     } 
                                 })}
@@ -47,7 +47,7 @@ export default function LocationModal() {
                                 {cities.cities.map((item, index) => {
                                     if (index >= 48 && index < 72) {
                                         return (
-                                            <div key={index}><span className="city" onClick={checkedLocation}>{item}</span></div>
+                                            <div key={item}><span className="city" onClick={checkedLocation}>{item}</span></div>
                                         )
                                     } 
                                 })}
@@ -56,7 +56,7 @@ export default function LocationModal() {
                                 {cities.cities.map((item, index) => {
                                     if (index > 72) {
                                         return (
-                                            <div key={index}><span className="city" onClick={checkedLocation}>{item}</span></div>
+                                            <div key={item}><span className="city" onClick={checkedLocation}>{item}</span></div>
                                         )
                                     } 
                                 })}
