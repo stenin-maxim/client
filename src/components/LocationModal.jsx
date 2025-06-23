@@ -3,6 +3,7 @@ import ReactModal from 'react-modal';
 import cities from "../assets/cities.json";
 
 export default function LocationModal() {
+    ReactModal.setAppElement('#root');
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [location, setLocation] = useState("Вся Россия(все регионы)");
     let openModal = () => { setModalIsOpen(true); };
@@ -62,7 +63,7 @@ export default function LocationModal() {
                                 })}
                             </div>
                             <div className="col-12">
-                                <div className='all-russ'>
+                                <div className='all-city'>
                                     <span onClick={checkedLocation} className="city">Вся Россия(все регионы)</span>
                                 </div>
                             </div>

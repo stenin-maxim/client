@@ -29,16 +29,15 @@
 
     	}
     }
-    .auth {
+    .auth-buttons {
     	margin-left: 15px;
     	border-left: 1px solid $white;
   		padding-left: 15px;
-    	.login {
-	        color: $white;
+    	.login-button, .logout-button {
 	        margin-right: 20px;
 	        color: $pink;
 	    }
-	    button {
+	    a {
 	    	text-decoration: none;
 	    	font-weight: 600;
 	    	color: $white;
@@ -141,7 +140,7 @@
         display: none;
         position: absolute;
         top: 3px;
-        left: 260px;
+        left: 500px;
         height: 100%;
         padding-left: 50px !important;
         li {
@@ -209,16 +208,9 @@
                 text-decoration: underline;
             }
         }
-        .all-russ {
+        .all-city {
             margin-top: 15px;
         }
-    }
-    .modal {
-        background-color: white;
-        padding: 30px 40px;
-        border-radius: 5px;
-        width: 500px;
-        position: relative;
     }
     &-overlay {
         position: fixed;
@@ -232,63 +224,6 @@
         top: -32px;
         font-size: 25px;
         cursor: pointer;
-    }
-    h2 {
-        text-align: center;
-        margin: 10px 0 20px;
-    }
-    .form {
-        &-control {
-            width: 95%;
-            padding: 10px;
-            font-size: 15px;
-            border-radius: 5px;
-            border: 1px solid $gray-2;
-            margin-top: 5px;
-            background: $gray-3;
-        }
-        button {
-            padding: 8px 30px;
-            border: none;
-            margin: 15px 0 0;
-            background: $pink;
-            color: $white;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 15px;
-        }
-        .err {
-            color: red;
-            font-size: 14px;
-        }
-    }
-    .form-check label {
-        margin-left: 7px;
-        cursor: pointer;
-    }
-    .modal-footer {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        margin: 10px 0 0;
-        button {
-            border: none;
-            cursor: pointer;
-            background: none;
-            text-decoration: underline;
-            color: $pink;
-            font-size: 14px;
-            &:hover {
-                text-decoration: none;
-            }
-        }
-    }
-    .forget-password {
-        margin-bottom: 10px;
-    }
-    #password-help {
-        font-size: 12px;
     }
 }
 

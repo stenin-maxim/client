@@ -1,0 +1,63 @@
+@use 'variables' as *;
+
+.auth {
+    padding: 15px 40px;
+    &-footer {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        a {
+            border: none;
+            cursor: pointer;
+            background: none;
+            text-decoration: underline;
+            color: $pink;
+            font-size: 16px;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+h2 {
+    text-align: center;
+    margin: 10px 0 20px;
+}
+
+.form {
+    &-control {
+        width: 100%;
+        padding: 10px;
+        font-size: 15px;
+        border-radius: 5px;
+        border: 1px solid $gray-2;
+        margin-top: 10px;
+        background: $gray-3;
+    }
+    button {
+        padding: 8px 30px;
+        border: none;
+        margin: 15px 0 0;
+        background: $pink;
+        color: $white;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 15px;
+    }
+    .err {
+        color: red;
+        font-size: 14px;
+    }
+}
+.form-check label {
+    margin-left: 7px;
+    cursor: pointer;
+}
+.forget-password {
+    margin-bottom: 10px;
+}
+#password-help {
+    font-size: 12px;
+}
