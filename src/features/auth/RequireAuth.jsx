@@ -8,7 +8,7 @@ const RequireAuth = () => {
     if (!accessToken) {
         return (
             <div>
-                <h1>Неавторизованны :(</h1>
+                <h1>Неавторизованный :(</h1>
                 <span>
                     <NavLink to='/login'>Войдите</NavLink>, чтобы получить доступ
                 </span>

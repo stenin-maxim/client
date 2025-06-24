@@ -1,10 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+//import 'dotenv/config'
+
+const baseUrl = import.meta.env.VITE_API_URL;
 
 export const login = createAsyncThunk(
     'auth/login',
     async( {email, password}, { rejectWithValue }) => {
         try {
-            const response = await fetch(import.meta.env.VITE_API_URL + "auth/login", {
+            const response = await fetch(`${baseUrl}auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
@@ -26,7 +29,7 @@ export const userRegister = createAsyncThunk(
     'auth/register',
     async ({name, email, password}, {rejectWithValue }) => {
         try {
-            const response = await fetch(import.meta.env.VITE_API_URL + "auth/register", {
+            const response = await fetch(`${baseUrl}auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email, password }),
