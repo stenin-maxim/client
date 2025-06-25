@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-//import 'dotenv/config'
 
 const baseUrl = import.meta.env.VITE_API_URL;
 
