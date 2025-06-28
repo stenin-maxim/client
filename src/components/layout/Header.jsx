@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router'
 import LocationModal from '../LocationModal';
 import Menu from '../Menu';
@@ -8,13 +9,29 @@ import { logout } from '../../features/auth/authSlice'
 
 export default function Header() {
     const accessToken = useSelector((state) => state.auth.accessToken)
+    const [isVisible, setIsVisible] = useState(false);
+    const wrapperRef = useRef(null);
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
     function handleLogout() {
         dispatch(logout());
+        setIsVisible(false);
         navigate('/');
     }
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (isVisible && wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+                setIsVisible(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [wrapperRef]);
 
     return (
         <header>
@@ -29,17 +46,15 @@ export default function Header() {
                         </div>
                         <div className="col-8">
                             <div className="header-top-right">
-                                <a href="" className="icon-text"><i className="bi bi-heart-fill" title="Избранное"></i><span>Избранное</span></a>
-                                <a href="" className="icon-text"><i className="bi bi-chat-fill" title="Сообщения"></i><span>Сообщения</span></a>
-                                <a href="" className="icon-text"><i className="bi bi-bell-fill" title="Уведомления"></i><span>Уведомления</span></a>
+                                <Link to="message" className="icon-text"><i className="bi bi-chat-fill" title="Сообщения"></i><span>Сообщения</span></Link>
+                                <Link to="favorites" className="icon-text"><i className="bi bi-heart-fill" title="Избранное"></i><span>Избранное</span></Link>
+                                <Link to="notifi" className="icon-text"><i className="bi bi-bell-fill" title="Уведомления"></i><span>Уведомления</span></Link>
+                                {!accessToken ? 
                                 <div className="auth-buttons">
-                                    {accessToken ? <Link className="logout-button" onClick={handleLogout}>Выход</Link> : 
-                                        <>
-                                            <Link to="login" className="login-button" >Вход</Link>
-                                            <Link to="register">Регистрация</Link>
-                                        </>
-                                    }
-                                </div>
+                                    <Link to="login" className="login-button" >Вход</Link>
+                                    <Link to="register">Регистрация</Link>
+                                </div> : false
+                                }
                             </div>
                         </div>
                     </div>
@@ -53,6 +68,22 @@ export default function Header() {
                                 <Menu />
                                 <SearchForm />
                                 <button className="btn-ad">Разместить обьявление</button>
+                                {accessToken && 
+                                <div ref={wrapperRef}>
+                                    <div className="avatar" onClick={() => setIsVisible(!isVisible)}>М</div>
+                                    {isVisible && (
+                                        <ul className="menu-user">
+                                            <li><Link to="/my-ads">Мои объявления</Link></li>
+                                            <li><Link to="">Кошелек</Link></li>
+                                            <li><Link to="">Мои заказы</Link></li>
+                                            <li><Link to="">Мои сообщения</Link></li>
+                                            <li><Link to="">Закладки</Link></li>
+                                            <li><Link to="settings">Настройки</Link></li>
+                                            <li><Link to="">Обратиться в поддержку</Link></li>
+                                            <li><Link className="logout-button" onClick={handleLogout}>Выход</Link></li>
+                                        </ul>
+                                    )}  
+                                </div> }
                             </div>
                         </div>
                     </div>

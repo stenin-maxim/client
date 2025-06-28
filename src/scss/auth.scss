@@ -20,6 +20,28 @@
     }
 }
 
+.auth-buttons {
+    margin-left: 20px;
+    border-left: 1px solid $white;
+    padding-left: 20px;
+    .login-button, .logout-button {
+        margin-right: 20px;
+        color: $pink;
+    }
+    a {
+        text-decoration: none;
+        font-weight: 600;
+        color: $white;
+        border: none;
+        background: none;
+        font-size: 15px;
+        cursor: pointer;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
 h2 {
     text-align: center;
     margin: 10px 0 20px;
