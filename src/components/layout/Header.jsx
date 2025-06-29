@@ -22,7 +22,7 @@ export default function Header() {
 
     useEffect(() => {
         function handleClickOutside(event) {
-            if (isVisible && wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
                 setIsVisible(false);
             }
         }
@@ -73,13 +73,13 @@ export default function Header() {
                                     <div className="avatar" onClick={() => setIsVisible(!isVisible)}>М</div>
                                     {isVisible && (
                                         <ul className="menu-user">
-                                            <li><Link to="/my-ads">Мои объявления</Link></li>
-                                            <li><Link to="">Кошелек</Link></li>
-                                            <li><Link to="">Мои заказы</Link></li>
-                                            <li><Link to="">Мои сообщения</Link></li>
-                                            <li><Link to="">Закладки</Link></li>
+                                            <li><Link to="ads">Мои объявления</Link></li>
+                                            <li><Link to="wallet">Кошелек</Link></li>
+                                            <li><Link to="orders">Мои заказы</Link></li>
+                                            <li><Link to="messages">Мои сообщения</Link></li>
+                                            <li><Link to="favorites">Избранное</Link></li>
                                             <li><Link to="settings">Настройки</Link></li>
-                                            <li><Link to="">Обратиться в поддержку</Link></li>
+                                            <li><Link to="support">Обратиться в поддержку</Link></li>
                                             <li><Link className="logout-button" onClick={handleLogout}>Выход</Link></li>
                                         </ul>
                                     )}  

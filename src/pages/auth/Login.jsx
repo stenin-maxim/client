@@ -53,7 +53,7 @@ export default function Login() {
                             <label htmlFor="checkbox">Запомнить меня</label>
                         </div>
                         <div className="center">
-                            <button type="submit">Войти</button>
+                            <input type="submit" value="Войти" className="form-submit"/>
                         </div>
                     </form>
                     <p className="auth-footer">

@@ -83,7 +83,7 @@ export default function Register() {
                             {errorConditions && <div><span className="err">{errorConditions}</span></div>}
                         </div>
                         <div className="center">
-                            <button type="submit">Зарегистрироваться</button>
+                            <input type="submit" value="Зарегистрироваться" className="form-submit"/>
                         </div>
                     </form>
                 </div>

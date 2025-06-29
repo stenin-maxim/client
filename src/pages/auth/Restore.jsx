@@ -25,7 +25,7 @@ export default function Restore() {
                             />
                         </div>
                         <div className="center">
-                            <button type="submit">Отправить</button>
+                            <input type="submit" value="Отправить" className="form-submit"/>
                         </div>
                     </form>
                 </div>
