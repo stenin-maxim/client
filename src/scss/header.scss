@@ -198,41 +198,51 @@
 
 .ReactModal {
     position: relative;
-    top: 12%;
+    top: 30%;
     left: 36%;
-    width: 500px;
-    &__Overlay {
-        z-index: 2;
-    }
+    width: 400px;
     &-location {
+        top: 12%;
         left: 28%;
-    }
-    .modal-location {
-        background-color: white;
-        padding: 30px 40px;
-        border-radius: 5px;
-        width: 700px;
-        position: relative;
-        .city {
-            cursor: pointer;
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-        .all-city {
-            margin-top: 15px;
-        }
     }
     &-overlay {
         position: fixed;
-        inset:0px;
+        z-index: 2;
+        inset: 0px;
         background-color: rgba(0, 0, 0, 0.75);
+    }
+    h2 {
+        text-align: center;
+    }
+    h3 {
+        margin: 5px 0;
+    }
+    .modal {
+        background-color: white;
+        padding: 20px 30px;
+        border-radius: 10px;
+        &-location {
+            background-color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            width: 700px;
+            position: relative;
+            .city {
+                cursor: pointer;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+            .all-city {
+                margin-top: 15px;
+            }
+        }
     }
     .bi-x-lg {
         position: absolute;
-        right: -26px;
+        right: -38px;
         color: white;
-        top: -32px;
+        top: -30px;
         font-size: 25px;
         cursor: pointer;
     }
