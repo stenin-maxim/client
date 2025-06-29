@@ -1,0 +1,16 @@
+@use 'variables' as *;
+
+.menu-sidebar {
+    border-top: 2px solid $gray-3;
+    padding: 20px 0 0;
+    max-width: 250px;
+    li {
+        padding-bottom: 10px;
+    }
+    a {
+        color: $black;
+        &:hover {
+            color: $blue;
+        }
+    }
+}
