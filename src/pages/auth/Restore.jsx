@@ -8,7 +8,7 @@ export default function Restore() {
             <div className="col-5">
                 <div className="auth">
                     <h2>Восстановление пароля</h2>
-                    <p className="center">Ссылка для смены пароля будет выслана на почту, указанную в Вашем профиле!</p>
+                    <p><center>Ссылка для смены пароля будет выслана на почту, указанную в Вашем профиле!</center></p>
                     <form className="form" method="POST">
                         <div className="mb-4">
                             <label htmlFor="email">Почта:</label>
@@ -24,9 +24,9 @@ export default function Restore() {
                                 placeholder='name@example.com'
                             />
                         </div>
-                        <div className="center">
+                        <center>
                             <input type="submit" value="Отправить" className="form-submit"/>
-                        </div>
+                        </center>
                     </form>
                 </div>
             </div>

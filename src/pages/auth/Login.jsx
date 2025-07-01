@@ -52,9 +52,9 @@ export default function Login() {
                             <input type="checkbox" defaultChecked={true} id="checkbox" name="rememberMe"/>
                             <label htmlFor="checkbox">Запомнить меня</label>
                         </div>
-                        <div className="center">
+                        <center>
                             <input type="submit" value="Войти" className="form-submit"/>
-                        </div>
+                        </center>
                     </form>
                     <p className="auth-footer">
                         <Link to="/restore" className="forget-password" >Забыли пароль?</Link>

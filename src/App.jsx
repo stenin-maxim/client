@@ -6,13 +6,13 @@ import RequireAuth from './features/auth/RequireAuth'
 import RootLayout from './layout/RootLayout';
 import ProfileLayout from './layout/ProfileLayout';
 import Home from './pages/Home';
-import Profile from './pages/Profile';
+import Profile from './pages/profile/Profile';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Restore from './pages/auth/Restore';
 import Settings from './pages/profile/Settings';
-import ProfileInactive from './components/profile/ProfileInactive';
-import ProfileActive from './components/profile/ProfileActive';
+import InactiveProfile from './components/profile/InactiveProfile';
+import ActiveProfile from './components/profile/ActiveProfile';
 
 export default function App() {
     const router = createBrowserRouter(
@@ -28,8 +28,8 @@ export default function App() {
                 <Route element={<RequireAuth />}>
                     <Route path="profile" element={<ProfileLayout />}>
                         <Route element={<Profile />}>
-                            <Route path="active" element={<ProfileActive />} />
-                            <Route path="inactive" element={<ProfileInactive />} />
+                            <Route path="active" element={<ActiveProfile />} />
+                            <Route path="inactive" element={<InactiveProfile />} />
                         </Route>
                         <Route path="settings" element={<Settings />} />
                     </Route>
