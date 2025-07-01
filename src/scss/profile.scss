@@ -1,0 +1,23 @@
+@use 'variables' as *;
+
+.profile-buttons {
+    margin: 10px 0 15px;
+    border-bottom: 1px solid $gray-3;
+    padding: 10px 0;
+    a {
+        margin-right: 20px;
+        font-size: 18px;
+        font-weight: 600;
+        color: $gray-1;
+        padding: 0 0 10px;
+    }
+    a.active {
+        color: $black;
+        border-bottom: 1px solid $black;
+    }
+}
+
+.profile-item {
+    display: flex;
+    justify-content: space-between;
+}

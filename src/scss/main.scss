@@ -10,12 +10,8 @@ body {
 }
 
 main {
-    background: #fafafa;
+    background: $gray-4;
     padding: 30px 0;
-}
-
-.center {
-    text-align: center;
 }
 
 li {
@@ -28,4 +24,12 @@ a {
 
 h2 {
     color: $black;
+    margin: 0 0 10px;
 }
+
+section {
+    background: $white;
+    border-radius: 10px;
+    padding: 25px;
+}
+
