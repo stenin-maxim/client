@@ -6,13 +6,19 @@ import RequireAuth from './features/auth/RequireAuth'
 import RootLayout from './layout/RootLayout';
 import ProfileLayout from './layout/ProfileLayout';
 import Home from './pages/Home';
-import Profile from './pages/profile/Profile';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Restore from './pages/auth/Restore';
+import Profile from './pages/profile/Profile';
 import Settings from './pages/profile/Settings';
 import InactiveProfile from './components/profile/InactiveProfile';
 import ActiveProfile from './components/profile/ActiveProfile';
+import NotFound from './pages/NotFound';
+import Favorites from './pages/profile/Favorites';
+import Messages from './pages/profile/Messages';
+import Support from './pages/profile/Support';
+import AdsFavorites from './components/profile/AdsFavorites';
+import SellersFavorites from './components/profile/SellersFavorites';
 
 export default function App() {
     const router = createBrowserRouter(
@@ -20,18 +26,25 @@ export default function App() {
             <Route path="/" element={<RootLayout />}>
                 {/* public routes */}
                 <Route index element={<Home/>} />
+                <Route path="*" element={<NotFound/>} />
                 <Route path="login" element={<Login/>} />
                 <Route path="register" element={<Register/>} />
                 <Route path="restore" element={<Restore/>} />
 
                 {/* protected routes */}
                 <Route element={<RequireAuth />}>
-                    <Route path="profile" element={<ProfileLayout />}>
-                        <Route element={<Profile />}>
+                    <Route element={<ProfileLayout />}>
+                        <Route path="profile" element={<Profile />}>
+                            <Route index element={<InactiveProfile />} />
                             <Route path="active" element={<ActiveProfile />} />
-                            <Route path="inactive" element={<InactiveProfile />} />
+                        </Route>
+                        <Route path="favorites" element={<Favorites />}>
+                            <Route index element={<AdsFavorites />} />
+                            <Route path="sellers" element={<SellersFavorites />} />
                         </Route>
                         <Route path="settings" element={<Settings />} />
+                        <Route path="messages" element={<Messages />} />
+                        <Route path="support" element={<Support />} />
                     </Route>
                 </Route>
             </Route>

@@ -46,14 +46,16 @@ export default function RootLayout() {
                             </div>
                             <div className="col-8">
                                 <div className="header-top-right">
-                                    <Link to="message" className="icon-text"><i className="bi bi-chat-fill" title="Сообщения"></i><span>Сообщения</span></Link>
-                                    <Link to="favorites" className="icon-text"><i className="bi bi-heart-fill" title="Избранное"></i><span>Избранное</span></Link>
-                                    <Link to="notifi" className="icon-text"><i className="bi bi-bell-fill" title="Уведомления"></i><span>Уведомления</span></Link>
                                     {!accessToken ? 
-                                    <div className="auth-buttons">
-                                        <Link to="login" className="login-button" >Вход</Link>
-                                        <Link to="register">Регистрация</Link>
-                                    </div> : false
+                                        <div className="auth-buttons">
+                                            <Link to="login" className="login-button" >Вход</Link>
+                                            <Link to="register">Регистрация</Link>
+                                        </div> : 
+                                        <div>
+                                            <Link to="message" className="icon-text"><i className="bi bi-chat-fill" title="Сообщения"></i><span>Сообщения</span></Link>
+                                            <Link to="favorites" className="icon-text"><i className="bi bi-heart-fill" title="Избранное"></i><span>Избранное</span></Link>
+                                            <Link to="notifi" className="icon-text"><i className="bi bi-bell-fill" title="Уведомления"></i><span>Уведомления</span></Link>
+                                        </div>     
                                     }
                                 </div>
                             </div>
@@ -73,13 +75,11 @@ export default function RootLayout() {
                                         <div className="avatar" onClick={() => setIsVisible(!isVisible)}>М</div>
                                         {isVisible && (
                                             <ul className="menu-user">
-                                                <li><Link to="/profile/inactive">Мои объявления</Link></li>
-                                                <li><Link to="orders">Заказы</Link></li>
-                                                <li><Link to="messages">Сообщения</Link></li>
-                                                <li><Link to="favorites">Избранное</Link></li>
-                                                <li><Link to="wallet">Кошелек</Link></li>
-                                                <li><Link to="/profile/settings">Настройки</Link></li>
-                                                <li><Link to="support">Обратиться в поддержку</Link></li>
+                                                <li><Link to="/profile">Мои объявления</Link></li>
+                                                <li><Link to="/messages">Сообщения</Link></li>
+                                                <li><Link to="/favorites">Избранное</Link></li>
+                                                <li><Link to="/settings">Настройки</Link></li>
+                                                <li><Link to="/support">Обратиться в поддержку</Link></li>
                                                 <li><Link className="logout-button" onClick={handleLogout}>Выход</Link></li>
                                             </ul>
                                         )}  
