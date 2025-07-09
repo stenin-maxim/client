@@ -1,5 +1,6 @@
 {
-    "Вещи, электроника и прочее": [
+    "mainCategory": "Вещи, электроника и прочее",
+    "categories": [
         {
             "category": "Мужской гардероб",
             "img": "images/category-icons/icon-cat-mclothes4x.png",

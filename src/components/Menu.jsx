@@ -18,8 +18,7 @@ export default function Menu() {
         e.target.lastChild.classList.add("active");
     }
 
-
-    let listCategory = categories["Вещи, электроника и прочее"].map((item) => {
+    let listCategory = categories.categories.map((item) => {
         return (
             <ul key={item.category}>
                 <li className='category-item' onMouseEnter={showSubcategory} style={{backgroundImage: "url(" + item.img + ")"}}>

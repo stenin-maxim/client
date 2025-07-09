@@ -152,7 +152,7 @@
         padding: 10px 45px;
     }
 
-    .btn-ad {
+    .btn-product {
         background: $green;
         color: white;
         border: none;
@@ -191,6 +191,17 @@
                 &:hover {
                     color: $blue;
                 }
+            }
+        }
+        .logout-button {
+            border: none;
+            background: none;
+            font-size: 15px;
+            padding: 0;
+            color: #333;
+            cursor: pointer;
+            &:hover {
+                color: $blue;
             }
         }
     }

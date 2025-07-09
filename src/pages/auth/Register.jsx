@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { userRegister } from '../../features/auth/authActions'
+import { setToken } from '../../features/auth/authSlice'
+//import { userRegister } from '../../features/auth/authActions'
 
 export default function Register() {
     const dispatch = useDispatch();
@@ -10,15 +11,31 @@ export default function Register() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [conditions, setConditions] = useState(false);
     const [errorConditions, setErrorConditions] = useState("");
+    const [isRequestPending, setIsRequestPending] = useState(false);
+    const baseUrl = import.meta.env.VITE_API_URL;
 
-    const submitForm = (data) => {
+    const submitForm = async (dataForm) => {
         if (!conditions) {
             setErrorConditions("Пожалуйста, примите условия пользовательского соглашения.");
             return
         } 
         setErrorConditions("");
-        dispatch(userRegister(data))
-        navigate('/login');
+
+        if (!isRequestPending) {
+            setIsRequestPending(true);
+            const response = await fetch(`${baseUrl}auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dataForm),
+            });
+            const data = await response.json();
+            if (response.ok && data.data.accessToken) {
+                dispatch(setToken(data.data.accessToken));
+                navigate('/profile');
+            } else {
+                alert('Ошибка регистрации');
+            }
+        }
     }
 
     return (
@@ -84,7 +101,7 @@ export default function Register() {
 
                         </div>
                         <center>
-                            <input type="submit" value="Зарегистрироваться" className="form-submit"/>
+                            <input type="submit" value="Зарегистрироваться" className="form-submit" disabled={isRequestPending}/>
                         </center>
                     </form>
                 </div>

@@ -1,16 +1,33 @@
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { login } from '../../features/auth/authActions'
+import { setToken } from '../../features/auth/authSlice'
 
 export default function Login() {
+    const [isRequestPending, setIsRequestPending] = useState(false);
 	const dispatch = useDispatch();
     const navigate = useNavigate();
 	const { register, handleSubmit, formState: { errors }  } = useForm()
+    const baseUrl = import.meta.env.VITE_API_URL;
 
-	const submitForm = (data) => {
-		dispatch(login(data))
-        navigate('/profile');
+	const submitForm = async (dataForm) => {
+        if (!isRequestPending) {
+            setIsRequestPending(true);
+            const response = await fetch(`${baseUrl}auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dataForm),
+            });
+            const data = await response.json();
+
+            if (response.ok && data.data.accessToken) {
+                dispatch(setToken(data.data.accessToken));
+                navigate('/profile');
+            } else {
+                alert('Ошибка входа');
+            }
+        }
 	}
 
     return (
@@ -53,7 +70,7 @@ export default function Login() {
                             <label htmlFor="checkbox">Запомнить меня</label>
                         </div>
                         <center>
-                            <input type="submit" value="Войти" className="form-submit"/>
+                            <input type="submit" value="Войти" className="form-submit" disabled={isRequestPending}/>
                         </center>
                     </form>
                     <p className="auth-footer">

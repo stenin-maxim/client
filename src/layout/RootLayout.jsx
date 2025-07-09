@@ -7,22 +7,36 @@ import Menu from '../components/Menu';
 import SearchForm from '../components/form/SearchForm';
 
 export default function RootLayout() {
+    const [isVisibleMenuUser, setIsVisibleMenuUser] = useState(false);
     const accessToken = useSelector((state) => state.auth.accessToken)
-    const [isVisible, setIsVisible] = useState(false);
     const wrapperRef = useRef(null);
     const dispatch = useDispatch()
     const navigate = useNavigate();
+    const baseUrl = import.meta.env.VITE_API_URL;
 
-    function handleLogout() {
-        dispatch(logout());
-        setIsVisible(false);
-        navigate('/');
+    async function handleLogout() {
+        try {
+            if (accessToken) {
+                const response = await fetch(`${baseUrl}auth/logout`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                if (response.ok) {
+                    dispatch(logout());
+                    setIsVisibleMenuUser(false);
+                    navigate('/login');
+                }
+            }
+            console.log("Пользователь не был авторизован");
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => {
         function handleClickOutside(event) {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-                setIsVisible(false);
+                setIsVisibleMenuUser(false);
             }
         }
 
@@ -31,6 +45,10 @@ export default function RootLayout() {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [wrapperRef]);
+
+    const btnProduct = () => {
+        accessToken ? navigate('/product') : alert('Авторизуйтесь, чтобы разместить обьявление')
+    }
 
     return (
         <>
@@ -69,18 +87,18 @@ export default function RootLayout() {
                                 <div className="d-flex justify-content-center">
                                     <Menu />
                                     <SearchForm />
-                                    <button className="btn-ad">Разместить обьявление</button>
+                                    <button className="btn-product" onClick={btnProduct}>Разместить обьявление</button>
                                     {accessToken && 
                                     <div ref={wrapperRef}>
-                                        <div className="avatar" onClick={() => setIsVisible(!isVisible)}>М</div>
-                                        {isVisible && (
+                                        <div className="avatar" onClick={() => setIsVisibleMenuUser(!isVisibleMenuUser)}>М</div>
+                                        {isVisibleMenuUser && (
                                             <ul className="menu-user">
                                                 <li><Link to="/profile">Мои объявления</Link></li>
                                                 <li><Link to="/messages">Сообщения</Link></li>
                                                 <li><Link to="/favorites">Избранное</Link></li>
                                                 <li><Link to="/settings">Настройки</Link></li>
                                                 <li><Link to="/support">Обратиться в поддержку</Link></li>
-                                                <li><Link className="logout-button" onClick={handleLogout}>Выход</Link></li>
+                                                <li><button className="logout-button" onClick={handleLogout}>Выход</button></li>
                                             </ul>
                                         )}  
                                     </div> }

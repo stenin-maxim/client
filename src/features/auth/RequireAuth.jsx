@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router"
+import { Link, Outlet } from "react-router"
 import { useSelector } from "react-redux"
 
 const RequireAuth = () => {
@@ -10,7 +10,7 @@ const RequireAuth = () => {
             <div>
                 <h1>Неавторизованный :(</h1>
                 <span>
-                    <NavLink to='/login'>Войдите</NavLink>, чтобы получить доступ
+                    <Link to='/login'>Войдите</Link>, чтобы получить доступ
                 </span>
             </div>
         )
