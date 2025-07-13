@@ -46,3 +46,13 @@ section {
     }
 }
 
+.btn {
+    border-radius: 5px;
+    padding: 10px 25px;
+    color: white;
+    background: $pink;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+}
+

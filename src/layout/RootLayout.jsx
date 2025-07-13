@@ -87,7 +87,7 @@ export default function RootLayout() {
                                 <div className="d-flex justify-content-center">
                                     <Menu />
                                     <SearchForm />
-                                    <button className="btn-product" onClick={btnProduct}>Разместить обьявление</button>
+                                    <button className="btn" onClick={btnProduct}>Разместить обьявление</button>
                                     {accessToken && 
                                     <div ref={wrapperRef}>
                                         <div className="avatar" onClick={() => setIsVisibleMenuUser(!isVisibleMenuUser)}>М</div>
