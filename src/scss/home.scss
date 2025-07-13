@@ -1,14 +1,136 @@
 @use 'variables' as *;
 
-.category {
-    a {
-        color: $black;
+// Стили для горизонтальной прокрутки категорий
+.categories-scroll-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 30px;
+    
+    // Градиенты для индикации прокрутки
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 40px;
+        z-index: 2;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
     }
-    .img-category {
-        width: 100%;
+    
+    &::before {
+        left: 0;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.9), transparent);
+    }
+    
+    &::after {
+        right: 0;
+        background: linear-gradient(to left, rgba(255, 255, 255, 0.9), transparent);
+    }
+    
+    // Скрываем градиенты когда нет прокрутки
+    &.no-scroll::before,
+    &.no-scroll::after {
+        opacity: 0;
     }
 }
 
+.categories-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 20px 50px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    
+    // Скрываем скроллбар
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.category-item {
+    min-width: 150px;
+    max-width: 170px;
+    flex-shrink: 0;
+    text-align: center;
+    transition: transform 0.2s ease;
+    
+    &:hover {
+        transform: translateY(-5px);
+    }
+    
+    a {
+        color: $black;
+        display: block;
+    }
+    
+    .img-category {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+        transition: transform 0.2s ease;
+    }
+    
+    span {
+        display: block;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.3;
+    }
+    
+    &:hover .img-category {
+        transform: scale(1.05);
+    }
+}
+
+// Кнопки навигации для категорий
+.categories-scroll-container .scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    
+    &:hover {
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transform: translateY(-50%) scale(1.1);
+    }
+    
+    &:active {
+        transform: translateY(-50%) scale(0.95);
+    }
+    
+    i {
+        font-size: 18px;
+        color: #333;
+    }
+    
+    &.scroll-btn-left {
+        left: 5px;
+    }
+    
+    &.scroll-btn-right {
+        right: 5px;
+    }
+}
 
 .block-ad {
     width: 217px;

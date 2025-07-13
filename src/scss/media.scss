@@ -1,0 +1,20 @@
+// Адаптивность для категорий на мобильных устройствах
+@media (max-width: 768px) {
+    .categories-scroll {
+        padding: 15px 20px;
+        gap: 15px;
+    }
+    
+    .category-item {
+        min-width: 120px;
+        max-width: 120px;
+        
+        .img-category {
+            height: 80px;
+        }
+        
+        span {
+            font-size: 12px;
+        }
+    }
+}

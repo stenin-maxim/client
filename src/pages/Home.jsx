@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import categories from '../assets/categories.json'
 
 export default function Home() {
-    const [error, setError] = useState(null);
     const [ads, setAds] = useState([]);
+    const [error, setError] = useState(null);
+    const categoriesScrollRef = useRef(null);
 
     useEffect(() => {
         fetch(import.meta.env.VITE_API_URL + "public/ads")
@@ -17,39 +19,59 @@ export default function Home() {
             )
     }, [])
 
-    let categories = [
-        {name: "Мужской гардероб", img: 'images/icon-cat-automobiles-rotator.png',},
-        {name: "Женский гардероб", img: 'images/icon-cat-automobiles-rotator.png',},
-        {name: "Детский гардероб", img: "images/icon-cat-gadgets-rotator.png"},
-        {name: "Детский товары", img: "images/icon-cat-kids-rotator.png"},
-        {name: "Хэндмейд", img: "images/icon-cat-gadgets-rotator.png"},
-        {name: "Телефоны и планшеты", img: "images/icon-cat-gadgets-rotator.png"},
-        {name: "Фото и видеокамеры", img: "images/icon-cat-gadgets-rotator.png"},
-        {name: "Компьютерная техника", img: "images/icon-cat-pc-rotator.png",},
-        {name: "ТВ, аудио, видео", img: "images/icon-cat-pc-rotator.png",},
-        {name: "Бытовая техника", img: "images/icon-cat-pc-rotator.png",},
-        {name: "Для дома и дачи", img: "images/icon-cat-home-rotator.png"},
-        {name: "Стройматериалы и инструменты",img: "images/icon-cat-tools-rotator.png",},
-        {name: "Красота и здоровье", img: "images/icon-cat-beauty-rotator.png",},
-        {name: "Спорт и отдых", img: "images/icon-cat-other-rotator.png",},
-        {name: "Хобби и развлечения", img: "images/icon-cat-other-rotator.png",},
-        {name: "Прочее", img: "images/icon-cat-other-rotator.png",},
-        {name: "Животные", img: "images/icon-cat-pets-rotator.png",},
-    ];
+    // Функции для прокрутки категорий
+    const scrollCategoriesLeft = () => {
+        if (categoriesScrollRef.current) {
+            categoriesScrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+        }
+    };
+
+    const scrollCategoriesRight = () => {
+        if (categoriesScrollRef.current) {
+            categoriesScrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+        }
+    };
+
+    // Функция для прокрутки к определенной позиции
+    const scrollToCategory = (index) => {
+        if (categoriesScrollRef.current) {
+            const itemWidth = 170; // ширина элемента + gap
+            const scrollPosition = index * itemWidth;
+            categoriesScrollRef.current.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+        }
+    };
 
     return (
         <>
             <div className="container">
                 <div className="row">
                     <h2>Выберите категорию</h2>
-                    {categories.map((item) => (
-                        <div key={item.name} className="col-2 text-center pb-3 mb-3 category">
-                            <a href="">
-                                <img className="img-category" src={item.img} alt={item.name}/>
-                                <span>{item.name}</span>
-                            </a>
+                    <div className="categories-scroll-container">
+                        <button 
+                            className="scroll-btn scroll-btn-left" 
+                            onClick={scrollCategoriesLeft}
+                            aria-label="Прокрутить категории влево"
+                        >
+                            <i className="bi bi-chevron-left"></i>
+                        </button>
+                        <div className="categories-scroll" ref={categoriesScrollRef}>
+                            {categories.categories.map((item) => (
+                                <div key={item.category} className="category-item">
+                                    <a href="">
+                                        <img className="img-category" src={item.bigImg} alt={item.category}/>
+                                        <span>{item.category}</span>
+                                    </a>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                        <button 
+                            className="scroll-btn scroll-btn-right" 
+                            onClick={scrollCategoriesRight}
+                            aria-label="Прокрутить категории вправо"
+                        >
+                            <i className="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
                 </div>
                 <div className="row">
                     <h2 className="mb-3">Отдам даром</h2>
