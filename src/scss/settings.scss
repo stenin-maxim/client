@@ -6,6 +6,7 @@
         display: flex;
         padding: 20px 10px;
         justify-content: space-between;
+        align-items: center;
         margin: 0;
         &:hover {
             background: $gray-4;
@@ -29,5 +30,40 @@
         &:hover {
             text-decoration: underline;
         }
+    }
+}
+
+.avatar-upload-area {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    margin: 20px 0;
+
+    &:hover {
+        border-color: $blue;
+        background: #e3f2fd;
+    }
+
+    i {
+        font-size: 48px;
+        color: #6c757d;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    p {
+        margin: 0;
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+    &.drag-over {
+        border-color: $blue;
+        background: #e3f2fd;
+        transform: scale(1.02);
     }
 }

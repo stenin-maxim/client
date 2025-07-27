@@ -1,5 +1,12 @@
 @use 'variables' as *;
 
+
+.sidebar {
+    p {
+        font-size: 24px;
+        font-weight: 600;
+    }
+}
 .menu-sidebar {
     border-top: 2px solid $gray-3;
     padding: 20px 0 0;
@@ -12,5 +19,13 @@
         &:hover {
             color: $blue;
         }
+    }
+}
+
+figure {
+    display: flex;
+    margin: 0;
+    figcaption {
+        margin-left: 10px;
     }
 }
