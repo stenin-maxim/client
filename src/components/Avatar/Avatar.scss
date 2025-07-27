@@ -1,0 +1,51 @@
+@use '../../scss/variables' as *;
+
+.avatar,
+.avatar-img {
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    background: $pink;
+    color: $white;
+    text-align: center;
+    object-fit: cover;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    font-size: 20px;
+    &--header {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
+        margin-left: 20px;
+    }
+    &--sidebar,
+    &--settings {
+        width: 80px;
+        height: 80px;
+        font-size: 37px;
+    }
+    &--settings {
+        margin: 15px 0;
+    }
+}
+
+.avatar-img {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #ddd;
+    &--header {
+        width: 42px;
+        height: 42px;
+        margin-left: 20px;
+    }
+    &--sidebar,
+    &--settings {
+        width: 80px;
+        height: 80px;
+    }
+}

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
+import './Avatar.scss';
 
 const Avatar = ({ src, alt, name, size = "default", className = "" }) => {
   const initial = name ? name[0] : "";
