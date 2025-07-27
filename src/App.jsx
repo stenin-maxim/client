@@ -11,14 +11,16 @@ import Register from './pages/auth/Register';
 import Restore from './pages/auth/Restore';
 import Profile from './pages/profile/Profile';
 import Settings from './pages/profile/Settings';
-import InactiveProfile from './components/profile/InactiveProfile';
-import ActiveProfile from './components/profile/ActiveProfile';
 import NotFound from './pages/NotFound';
+import Product from './pages/Product';
 import Favorites from './pages/profile/Favorites';
 import Messages from './pages/profile/Messages';
 import Support from './pages/profile/Support';
+import InactiveProfile from './components/profile/InactiveProfile';
+import ActiveProfile from './components/profile/ActiveProfile';
 import AdsFavorites from './components/profile/AdsFavorites';
 import SellersFavorites from './components/profile/SellersFavorites';
+import VerifyEmail from './pages/VerifyEmail';
 
 export default function App() {
     const router = createBrowserRouter(
@@ -30,9 +32,11 @@ export default function App() {
                 <Route path="login" element={<Login/>} />
                 <Route path="register" element={<Register/>} />
                 <Route path="restore" element={<Restore/>} />
+                <Route path="/verify-email/:id/:hash" element={<VerifyEmail />} />
 
                 {/* protected routes */}
                 <Route element={<RequireAuth />}>
+                    <Route path="product" element={<Product/>} />
                     <Route element={<ProfileLayout />}>
                         <Route path="profile" element={<Profile />}>
                             <Route index element={<InactiveProfile />} />

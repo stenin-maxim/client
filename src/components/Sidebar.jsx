@@ -1,11 +1,17 @@
 import { Link } from 'react-router'
+import { useSelector } from 'react-redux';
 
 export default function Sidebar() {
+    const user = useSelector(state => state.auth.user);
+    const avatar = useSelector(state => state.auth.avatar);
+
     return (
         <aside className="sidebar">
-            <p>Username</p>
-            <div className="avatar">Avatar</div>
-            <div>на Сайте с 22 июля 2021</div>
+            <p>{user?.name}</p>
+            <figure>
+                {avatar ? <img src={avatar} alt="avatar" className="avatar-img" /> : <div className="avatar avatar-sidebar">{user?.name[0]}</div>}
+                <figcaption>на Сайте с 22 июля 2021</figcaption>
+            </figure>
             <ul className="menu-sidebar">
                 <li><Link to="/profile">Мои объявления</Link></li>
                 <li><Link to="/messages">Сообщения</Link></li>
