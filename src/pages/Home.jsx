@@ -22,13 +22,13 @@ export default function Home() {
     // Функции для прокрутки категорий
     const scrollCategoriesLeft = () => {
         if (categoriesScrollRef.current) {
-            categoriesScrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+            categoriesScrollRef.current.scrollBy({ left: -600, behavior: 'smooth' });
         }
     };
 
     const scrollCategoriesRight = () => {
         if (categoriesScrollRef.current) {
-            categoriesScrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+            categoriesScrollRef.current.scrollBy({ left: 600, behavior: 'smooth' });
         }
     };
 
