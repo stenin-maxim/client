@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { setToken } from '../../features/auth/authSlice'
-//import { userRegister } from '../../features/auth/authActions'
+import { setToken, setUser } from '../../features/auth/authSlice'
 
 export default function Register() {
     const dispatch = useDispatch();
@@ -31,6 +30,8 @@ export default function Register() {
             const data = await response.json();
             if (response.ok && data.data.accessToken) {
                 dispatch(setToken(data.data.accessToken));
+                dispatch(setUser(data.data.user));
+                alert('Вам на почту отправлено письмо для подтверждения регистрации');
                 navigate('/profile');
             } else {
                 alert('Ошибка регистрации');

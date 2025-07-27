@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { setToken } from '../../features/auth/authSlice'
+import { setToken, setUser } from '../../features/auth/authSlice'
 
 export default function Login() {
     const [isRequestPending, setIsRequestPending] = useState(false);
@@ -12,21 +12,28 @@ export default function Login() {
     const baseUrl = import.meta.env.VITE_API_URL;
 
 	const submitForm = async (dataForm) => {
-        if (!isRequestPending) {
-            setIsRequestPending(true);
-            const response = await fetch(`${baseUrl}auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dataForm),
-            });
-            const data = await response.json();
-
-            if (response.ok && data.data.accessToken) {
+        try {
+            if (!isRequestPending) {
+                setIsRequestPending(true);
+                const response = await fetch(`${baseUrl}auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dataForm),
+                })
+    
+                if (!response.ok) {
+                    setIsRequestPending(false);
+                    const errorData = await response.json();
+                    throw new Error(`Ошибка: ${errorData.message || 'Неизвестная ошибка'}`);
+                }
+                const data = await response.json();
                 dispatch(setToken(data.data.accessToken));
+                dispatch(setUser(data.data.user));
                 navigate('/profile');
-            } else {
-                alert('Ошибка входа');
             }
+        } catch (error) {
+            alert(error.message);
+            setIsRequestPending(false);
         }
 	}
 
