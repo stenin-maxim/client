@@ -21,6 +21,9 @@
             width: 100%;
         }
     }
+    dl:last-child {
+        border-bottom: none;
+    }
     .btn-personal-data {
         color: $blue;
         border: none;

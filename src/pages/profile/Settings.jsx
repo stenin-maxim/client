@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import ReactModal from 'react-modal';
 import { useSelector, useDispatch } from 'react-redux';  
-import { setAvatar } from '../../features/auth/authSlice';
-import { fetchAvatar, uploadAvatar, deleteAvatar } from '../../api/userApi';
+import { setAvatar, setUser } from '../../features/auth/authSlice';
+import { fetchAvatar, uploadAvatar, deleteAvatar, updateName, updatePhone, updateCity, updateEmail } from '../../api/userApi';
 import Avatar from '../../components/Avatar/Avatar';
 
 export default function Settings() {
@@ -14,23 +14,27 @@ export default function Settings() {
     const user = useSelector(state => state.auth.user);
     const avatar = useSelector(state => state.auth.avatar);
     const [name, setName] = useState(user?.name || "");
+    const [phone, setPhone] = useState(user?.phone || "");
+    const [city, setCity] = useState(user?.city || "");
+    const [email, setEmail] = useState(user?.email || "");
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false); //
     const [avatarFile, setAvatarFile] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState(null);
     const dispatch = useDispatch();
-    let openModalName = () => { setModalIsOpenName(true); },
+    let openModalName = () => { setModalIsOpenName(true); setError('');},
         closeModalName = () => { setModalIsOpenName(false); },
-        openModalPhone = () => { setModalIsOpenPhone(true); },
+        openModalPhone = () => { setModalIsOpenPhone(true); setError('');},
         closeModalPhone = () => { setModalIsOpenPhone(false); },
-        openModalCity = () => { setModalIsOpenCity(true); },
+        openModalCity = () => { setModalIsOpenCity(true); setError('');},
         closeModalCity = () => { setModalIsOpenCity(false); },
-        openModalEmail = () => { setModalIsOpenEmail(true); },
+        openModalEmail = () => { setModalIsOpenEmail(true); setError('');},
         closeModalEmail = () => { setModalIsOpenEmail(false); },
         openModalAvatar = () => { setModalIsOpenAvatar(true); },
         closeModalAvatar = () => { setModalIsOpenAvatar(false); setAvatarFile(null); setAvatarPreview(null);};
 
-
     useEffect(() => {
-        fetchAvatar()
+        fetchAvatar(localStorage.getItem('accessToken'))
             .then(data => {
                 dispatch(setAvatar(data.avatar));
             })
@@ -38,10 +42,6 @@ export default function Settings() {
                 console.error('Error fetching avatar:', error);
             });
     }, []);
-
-    const handleNameChange = (e) => {
-        setName(e.target.value);
-    }
 
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
@@ -82,6 +82,71 @@ export default function Settings() {
             .catch(error => console.error('Error deleting avatar:', error));
     };
 
+    const handleNameChange = (e) => setName(e.target.value);
+    const handlePhoneChange = (e) => setPhone(e.target.value);
+    const handleCityChange = (e) => setCity(e.target.value);
+    const handleEmailChange = (e) => setEmail(e.target.value);
+
+    const handleNameSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        try {
+            await updateName(localStorage.getItem('accessToken'), name);
+            dispatch(setUser({...user, name})); // Обновляем только имя, остальные поля сохраняются
+            closeModalName();
+        } catch (err) {
+            setError('Не удалось обновить имя');
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const handlePhoneSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        try {
+            await updatePhone(localStorage.getItem('accessToken'), phone);
+            dispatch(setUser({...user, phone}));
+            closeModalPhone();
+        } catch (err) {
+            setError('Не удалось обновить номер телефона');
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const handleCitySubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        try {
+            await updateCity(localStorage.getItem('accessToken'), city);
+            dispatch(setUser({...user, city}));
+            closeModalCity();
+        } catch (err) {
+            setError('Не удалось обновить город');
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const handleEmailSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        try {
+            await updateEmail(localStorage.getItem('accessToken'), email);
+            dispatch(setUser({...user, email, email_verified_at: null}));
+            closeModalEmail();
+        } catch (err) {
+            setError('Не удалось обновить email');
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <>
             <div className="settings">
@@ -89,9 +154,7 @@ export default function Settings() {
                 <dl>
                     <dt>Главное фото</dt>
                     <dd>
-                        {/* <span> */}
                         <Avatar src={avatar} name={user?.name} size="settings" />
-                        {/* {avatar ? <img src={avatar} className="avatar-img" alt="avatar" /> : <div className="avatar avatar-settings">{user?.name[0]}</div>}</span> */}
                         <button className="btn-personal-data" onClick={openModalAvatar}>Редактировать</button>
                     </dd>
                 </dl>
@@ -171,10 +234,20 @@ export default function Settings() {
                     <div className="modal">
                         <i className="bi bi-x-lg" onClick={closeModalName}></i>
                         <h3>Имя: <span>{name}</span></h3>
-                        <form className="form">
-                            <input type="text" className="form-control" placeholder='Имя' value={name} minLength={2} maxLength={30} onChange={handleNameChange}/>
+                        <form className="form" onSubmit={handleNameSubmit}>
+                            <input type="text"
+                                className="form-control"
+                                placeholder='Имя'
+                                value={name}
+                                minLength={2}
+                                maxLength={30}
+                                onChange={handleNameChange}
+                                disabled={loading}
+                            />
+                            {error && <div className="error">{error}</div>}
+                            {loading && <span>Сохраняем...</span>}
                             <p className="buttons">
-                                <input type="submit" value="Сохранить" className="form-submit" />
+                                <input type="submit" value="Сохранить" className="form-submit" disabled={loading} />
                                 <input type="button" value="Отмена" className="form-button" onClick={closeModalName} />
                             </p>
                         </form>
@@ -187,10 +260,23 @@ export default function Settings() {
                         <i className="bi bi-x-lg" onClick={closeModalPhone}></i>
                         <h3>Номер телефона</h3>
                         <p>Укажите номер телефона, по которому покупатели смогут с вами связаться</p>
-                        <form className="form">
-                            <input type="phone" className="form-control" placeholder='+7(___)___-__-__'/>
+                        <form className="form" onSubmit={handlePhoneSubmit}>
+                            <input type="phone"
+                            className="form-control"
+                            placeholder='+7XXXXXXXXXX'
+                            value={phone}
+                            onChange={handlePhoneChange}
+                            disabled={loading}
+                            required
+                            pattern="^\+7\d{10}$"
+                            title="Формат: +7XXXXXXXXXX"
+                            maxLength={15}
+                        />
+                            {error && <div className="error">{error}</div>}
+                            {loading && <span>Сохраняем...</span>}
                             <p className="buttons">
-                                <input type="submit" value="Сохранить" className="form-submit"/>
+                                <input type="submit" value="Сохранить" className="form-submit" disabled={loading} />
+                                <input type="button" value="Отмена" className="form-button" onClick={closeModalPhone} />
                             </p>
                         </form>
                     </div>
@@ -202,10 +288,22 @@ export default function Settings() {
                         <i className="bi bi-x-lg" onClick={closeModalCity}></i>
                         <h3>Город</h3>
                         <p>Укажите город, в котором вы находитесь или выберите из списка</p>
-                        <form className="form">
-                            <input type="text" className="form-control" placeholder='Введите название города'/>
+                        <form className="form" onSubmit={handleCitySubmit}>
+                            <input type="text"
+                                className="form-control"
+                                placeholder='Введите название города'
+                                value={city}
+                                onChange={handleCityChange}
+                                disabled={loading}
+                                required
+                                minLength={2}
+                                maxLength={50}
+                            />
+                            {error && <div className="error">{error}</div>}
+                            {loading && <span>Сохраняем...</span>}
                             <p className="buttons">
-                                <input type="submit" value="Сохранить" className="form-submit"/>
+                                <input type="submit" value="Сохранить" className="form-submit" disabled={loading} />
+                                <input type="button" value="Отмена" className="form-button" onClick={closeModalCity} />
                             </p>
                         </form>
                     </div>
@@ -216,10 +314,22 @@ export default function Settings() {
                     <div className="modal">
                         <i className="bi bi-x-lg" onClick={closeModalEmail}></i>
                         <h3>E-mail</h3>
-                        <form className="form">
-                            <input type="email" className="form-control"/>
+                        <form className="form" onSubmit={handleEmailSubmit}>
+                            <input type="email"
+                                className="form-control"
+                                placeholder='example@mail.com'
+                                value={email}
+                                onChange={handleEmailChange}
+                                disabled={loading}
+                                required
+                                title="Формат: example@mail.com"
+                                maxLength={50}
+                            />
+                            {error && <div className="error">{error}</div>}
+                            {loading && <span>Сохраняем...</span>}
                             <p className="buttons">
-                                <input type="submit" value="Сохранить" className="form-submit"/>
+                                <input type="submit" value="Сохранить" className="form-submit" disabled={loading} />
+                                <input type="button" value="Отмена" className="form-button" onClick={closeModalEmail} />
                             </p>
                         </form>
                     </div>
