@@ -1,10 +1,15 @@
 @use 'variables' as *;
 
-
 .sidebar {
     p {
         font-size: 24px;
         font-weight: 600;
+    }
+
+    .name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
 .menu-sidebar {

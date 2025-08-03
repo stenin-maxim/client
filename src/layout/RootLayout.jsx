@@ -31,7 +31,6 @@ export default function RootLayout() {
                     navigate('/login');
                 }
             }
-            console.log("Пользователь не был авторизован");
         } catch (error) {
             console.log(error);
         }

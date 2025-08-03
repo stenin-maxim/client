@@ -8,7 +8,7 @@ export default function Sidebar() {
 
     return (
         <aside className="sidebar">
-            <p>{user?.name}</p>
+            <p className='name'>{user?.name}</p>
             <figure>
                 <Avatar src={avatar} name={user?.name} size="sidebar" />
                 <figcaption>на Сайте с 22 июля 2021</figcaption>
