@@ -1,7 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL;
 const token = localStorage.getItem('accessToken');
 
-export async function fetchAvatar() {
+export async function fetchAvatar(token) {
     const response = await fetch(`${API_URL}avatar`, {
         method: 'GET',
         headers: {
@@ -32,5 +32,59 @@ export async function deleteAvatar() {
             'Authorization': `Bearer ${token}`,
         },
     });
+    return response.json();
+}
+
+export async function updateName(token, name) {
+    const response = await fetch(`${API_URL}profile/name`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name }),
+        credentials: 'include',
+    });
+    if (!response.ok) throw new Error('Ошибка обновления имени');
+    return response.json();
+}
+
+export async function updatePhone(token, phone) {
+    const response = await fetch(`${API_URL}profile/phone`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ phone }),
+    });
+    if (!response.ok) throw new Error('Ошибка обновления номера телефона');
+    return response.json();
+}
+
+export async function updateCity(token, city) {
+    console.log(city);
+    const response = await fetch(`${API_URL}profile/city`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ city }),
+    });
+    if (!response.ok) throw new Error('Ошибка обновления города');
+    return response.json();
+}
+
+export async function updateEmail(token, email) {
+    const response = await fetch(`${API_URL}profile/email`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email }),
+    });
+    if (!response.ok) throw new Error('Ошибка обновления email');
     return response.json();
 }
