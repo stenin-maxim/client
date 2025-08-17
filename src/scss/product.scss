@@ -1,0 +1,188 @@
+@use 'variables' as *;
+
+@mixin product-input {
+    border: 1px solid $gray-3;
+    border-radius: 5px;
+    padding: 7px 10px;
+}
+
+.select {
+    margin-right: 15px;
+    &-placeholder, &-input {
+        padding: 7px 10px;
+        cursor: pointer;
+        width: 350px;
+    }
+    &-body {
+        max-height: 210px;
+        overflow: scroll;
+        position: absolute;
+        border-bottom: 1px solid $gray-3;
+        border-left: 1px solid $gray-3;
+        border-right: 1px solid $gray-3;
+        border-radius: 5px;
+        background: $white;
+        z-index: 2;
+    }
+    &-placeholder {
+        border: 1px solid $gray-3;
+        border-radius: 5px;
+        position: relative;
+        span {
+            border-color: rgb(128, 128, 128) transparent transparent;
+            border-style: solid;
+            border-width: 5px 5px 2.5px;
+            display: inline-block;
+            height: 0px;
+            width: 0px;
+            position: absolute;
+            top: 17px;
+            right: 12px;
+        }
+    }
+    &-input {
+        &:hover {
+            background: $gray-3;
+        }
+    }
+}
+
+.product {
+    &-item {
+        display: flex;
+        margin-bottom: 30px;
+        &-right {
+            width: 50%;
+        }
+        .ruble {
+            margin-left: 10px;
+        }
+        .save-text {
+            margin: 10px;
+        }
+    }
+    &-title {
+        width: 150px;
+        margin-right: 70px;
+        span::after {
+            color: $red;
+            content: "*";
+            margin-left: 2px;
+        }
+    }
+    &-input {
+        @include product-input;
+        width: 400px;
+        font-size: 15px;
+        margin-right: 10px;
+    }
+    &-price {
+        @include product-input;
+        width: 140px;
+        font-size: 15px;
+    }
+    .hint {
+        display: block;
+        font-size: 13px;
+    }
+    textarea {
+        resize: none;
+        max-height: 200px;
+        min-height: 130px;
+    }
+    .input-checkbox {
+        margin-right: 15px;
+    }
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: $pink;
+    color: $white;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    &:hover {
+        background-color: $gray-1;
+    }
+}
+
+.preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.preview-item {
+    position: relative;
+    margin-right: 15px;
+    margin-bottom: 10px;
+}
+
+.preview-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.remove-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: $white;
+    color: $black;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &::after {
+        content: "\2716";
+    }
+}
+
+// Стили для ошибок
+.error-message {
+    color: $red;
+    font-size: 13px;
+    display: block;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.error-input {
+    border-color: $red !important;
+    box-shadow: 0 0 0 1px rgba(255, 0, 0, 0.1);
+    
+    &:focus {
+        outline: none;
+        border-color: $red !important;
+        box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Стили для select с ошибками
+.select {
+    &.error-select {
+        .select-placeholder {
+            border-color: $red;
+        }
+    }
+}

@@ -88,3 +88,20 @@ export async function updateEmail(token, email) {
     if (!response.ok) throw new Error('Ошибка обновления email');
     return response.json();
 }
+
+export async function createProduct(formData) {
+    const response = await fetch(`${API_URL}product`, {
+        method: "POST",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json'
+        },
+        body: formData,
+    });
+    
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Ошибка создания продукта: ${response.status} ${errorText}`);
+    }
+    return response.json();
+}
