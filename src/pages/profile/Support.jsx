@@ -1,7 +1,6 @@
 import support from "../../assets/support.json";
 
 export default function Support() {
-    console.log(support);
     return (
         <form action="">
             <p>

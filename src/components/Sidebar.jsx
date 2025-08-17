@@ -11,7 +11,7 @@ export default function Sidebar() {
             <p className='name'>{user?.name}</p>
             <figure>
                 <Avatar src={avatar} name={user?.name} size="sidebar" />
-                <figcaption>на Сайте с 22 июля 2021</figcaption>
+                <figcaption>на Сайте с {user?.created_at}</figcaption>
             </figure>
             <ul className="menu-sidebar">
                 <li><Link to="/profile">Мои объявления</Link></li>

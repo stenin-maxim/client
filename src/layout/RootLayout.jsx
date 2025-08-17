@@ -6,6 +6,8 @@ import LocationModal from '../components/LocationModal';
 import Menu from '../components/Menu';
 import SearchForm from '../components/form/SearchForm';
 import Avatar from '../components/Avatar/Avatar';
+import { fetchAvatar } from '../api/userApi';
+import { setAvatar } from '../features/auth/authSlice';
 
 export default function RootLayout() {
     const [isVisibleMenuUser, setIsVisibleMenuUser] = useState(false);
@@ -35,6 +37,16 @@ export default function RootLayout() {
             console.log(error);
         }
     }
+
+    useEffect(() => {
+        fetchAvatar(accessToken)
+            .then(data => {
+                dispatch(setAvatar(data.avatar));
+            })
+            .catch(error => {
+                console.error('Error fetching avatar:', error);
+            });
+    }, []);
 
     useEffect(() => {
         function handleClickOutside(event) {

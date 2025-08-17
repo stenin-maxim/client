@@ -33,16 +33,6 @@ export default function Settings() {
         openModalAvatar = () => { setModalIsOpenAvatar(true); },
         closeModalAvatar = () => { setModalIsOpenAvatar(false); setAvatarFile(null); setAvatarPreview(null);};
 
-    useEffect(() => {
-        fetchAvatar(localStorage.getItem('accessToken'))
-            .then(data => {
-                dispatch(setAvatar(data.avatar));
-            })
-            .catch(error => {
-                console.error('Error fetching avatar:', error);
-            });
-    }, []);
-
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
         if (file) {

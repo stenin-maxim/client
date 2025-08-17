@@ -19,8 +19,7 @@ export default function VerifyEmail() {
             return;
         }
 
-        fetch(
-            `${import.meta.env.VITE_API_URL}email/verify/${id}/${hash}${query}`,
+        fetch(`${import.meta.env.VITE_API_URL}email/verify/${id}/${hash}${query}`,
             {
                 method: "GET",
                 headers: {
