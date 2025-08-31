@@ -15,9 +15,91 @@
         color: $black;
         border-bottom: 1px solid $black;
     }
+    sup {
+        margin-left: 5px;
+    }
 }
 
 .profile-item {
     display: flex;
+    margin-bottom: 30px;
+    background: $gray-4;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px $gray-3;
     justify-content: space-between;
+    &__left, &__group, &__right {
+        display: flex;
+    }
+    &__right {
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: end;
+    }
+    &__menu {
+        position: relative;
+        width: 26px;
+        height: 30px;
+        padding-left: 20px;
+        padding-bottom: 10px;
+        cursor: pointer;
+        &:hover ul {
+            display: block;
+        }
+    }
+    &__desc {
+        line-height: 1.5;
+    }
+    &__group {
+        color: $gray-1;
+        span {
+            margin-left: 5px;
+        }
+    }
+    &__views {
+        margin-right: 15px;
+    }
+    &:hover {
+        box-shadow: 2px 5px 15px $gray-2;
+    }
+    .bi-three-dots {
+        font-size: 22px;
+    }
+    .bi-eye, .bi-heart-fill {
+        font-size: 14px;
+    }
+    ul {
+        display: none;
+        width: 200px;
+        padding: 10px 0;
+        margin: 0;
+        position: absolute;
+        right: 0;
+        background: $white;
+        box-shadow: 0 0 5px $gray-2;
+        border-radius: 5px;
+        font-size: 15px;
+        li {
+            padding: 5px 10px;
+            &:hover {
+                background: $gray-3;
+            }
+        }
+    }
+    img {
+        width: 160px;
+        height: 120px;
+        border-radius: 10px;
+    }
+    img, &__desc {
+        margin-right: 20px;
+    }
+    h3, h4 {
+        font-weight: 600;
+        margin: 0;
+    }
+    .price::after {
+        content: "\20BD"; /* Символ рубля */
+        padding-left: 5px;
+    }
 }
