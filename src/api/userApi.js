@@ -105,3 +105,13 @@ export async function createProduct(formData) {
     }
     return response.json();
 }
+
+export async function getUserProduct() {
+    const response = await fetch(`${API_URL}product`, {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        }
+    });
+    return response.json();
+}
