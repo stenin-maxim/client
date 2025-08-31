@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ReactModal from 'react-modal';
 import { useSelector, useDispatch } from 'react-redux';  
 import { setAvatar, setUser } from '../../features/auth/authSlice';
-import { fetchAvatar, uploadAvatar, deleteAvatar, updateName, updatePhone, updateCity, updateEmail } from '../../api/userApi';
+import { uploadAvatar, deleteAvatar, updateName, updatePhone, updateCity, updateEmail } from '../../api/userApi';
 import Avatar from '../../components/Avatar/Avatar';
 
 export default function Settings() {
@@ -18,7 +18,7 @@ export default function Settings() {
     const [city, setCity] = useState(user?.city || "");
     const [email, setEmail] = useState(user?.email || "");
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false); //
+    const [loading, setLoading] = useState(false); // отменить многочисленное нажатие кнопки, при отправке данных 
     const [avatarFile, setAvatarFile] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState(null);
     const dispatch = useDispatch();

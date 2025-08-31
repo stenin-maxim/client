@@ -6,7 +6,6 @@ import { createProduct } from '../api/userApi';
 export default function Product() {
     const navigate = useNavigate();
     const [photos, setPhotos] = useState([]);
-	const token = localStorage.getItem('accessToken');
     const [productData, setProductData] = useState({
         category: "Выберите категорию",
         subcategory: "Выберите подкатегорию",
