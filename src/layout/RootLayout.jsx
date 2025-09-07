@@ -6,7 +6,7 @@ import LocationModal from '../components/LocationModal';
 import Menu from '../components/Menu';
 import SearchForm from '../components/form/SearchForm';
 import Avatar from '../components/Avatar/Avatar';
-import { fetchAvatar } from '../api/userApi';
+import { getAvatar } from '../api/userApi';
 import { setAvatar } from '../features/auth/authSlice';
 
 export default function RootLayout() {
@@ -39,7 +39,7 @@ export default function RootLayout() {
     }
 
     useEffect(() => {
-        fetchAvatar(accessToken)
+        getAvatar(accessToken)
             .then(data => {
                 dispatch(setAvatar(data.avatar));
             })

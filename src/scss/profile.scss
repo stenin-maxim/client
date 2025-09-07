@@ -40,8 +40,7 @@
         position: relative;
         width: 26px;
         height: 30px;
-        padding-left: 20px;
-        padding-bottom: 10px;
+        padding-left: 30px;
         cursor: pointer;
         &:hover ul {
             display: block;
@@ -78,12 +77,20 @@
         background: $white;
         box-shadow: 0 0 5px $gray-2;
         border-radius: 5px;
-        font-size: 15px;
         li {
-            padding: 5px 10px;
             &:hover {
                 background: $gray-3;
             }
+        }
+        button {
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            padding: 7px 10px;
+            font-size: 15px;
+            cursor: pointer;
+            color: $black;
         }
     }
     img {
@@ -98,8 +105,11 @@
         font-weight: 600;
         margin: 0;
     }
-    .price::after {
-        content: "\20BD"; /* Символ рубля */
-        padding-left: 5px;
+    .price {
+        font-size: 19px;
+        &::after {
+            content: "\20BD"; /* Символ рубля */
+            padding-left: 5px;
+        }
     }
 }
