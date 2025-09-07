@@ -1,7 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL;
 const token = localStorage.getItem('accessToken');
 
-export async function fetchAvatar(token) {
+export async function getAvatar(token) {
     const response = await fetch(`${API_URL}avatar`, {
         method: 'GET',
         headers: {
@@ -89,6 +89,7 @@ export async function updateEmail(token, email) {
     return response.json();
 }
 
+// product
 export async function createProduct(formData) {
     const response = await fetch(`${API_URL}product`, {
         method: "POST",
@@ -112,6 +113,28 @@ export async function getUserProduct() {
         headers: {
             'Authorization': `Bearer ${token}`,
         }
+    });
+    return response.json();
+}
+
+export async function publishUserProduct(productId) { // опубликовать обьявление
+    const response = await fetch(`${API_URL}product/publish/${productId}`, {
+        method: "PATCH",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: productId,
+    });
+    return response.json();
+}
+
+export async function deleteUserProduct(productId) {
+    const response = await fetch(`${API_URL}product/${productId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
     });
     return response.json();
 }
