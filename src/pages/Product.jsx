@@ -13,6 +13,7 @@ export default function Product() {
         type_ad: "Не выбрано",
         name: '',
         price: '',
+        amount: 1,
         desc: '',
         location: '',
         autopublish: false
@@ -72,6 +73,14 @@ export default function Product() {
             newErrors.price = "Цена слишком большая";
         }
 
+        // Валидация количество
+        if (!productData.price.trim()) {
+            newErrors.amount = "Введите количество";
+        } else if (parseInt(productData.amount) < 1 || parseInt(productData.amount) > 1000) {
+            console.log(productData.amount);
+            newErrors.amount = "Пожалуйста, введите количество от 1 до 1000";
+        }
+
         // Валидация описания
         if (productData.desc.trim().length > 3000) {
             newErrors.desc = "Описание не должно превышать 3000 символов";
@@ -126,7 +135,7 @@ export default function Product() {
             clearError(name);
         }
         
-        if (name === 'price') {
+        if (name === 'price' || name === 'amount') {
             const onlyNums = event.target.value.replace(/[^0-9]/g, '');
             setProductData({ ...productData, [name]: onlyNums });
             return
@@ -212,6 +221,7 @@ export default function Product() {
                 type_ad: "Не выбрано",
                 name: '',
                 price: '',
+                amount: 1,
                 desc: '',
                 location: '',
                 autopublish: false
@@ -357,13 +367,7 @@ export default function Product() {
                                     ? Number(productData.price).toLocaleString('ru-RU')
                                     : ''
                             }
-                            onChange={e => {
-                                // Удаляем все нецифровые символы
-                                const onlyNums = e.target.value.replace(/\D/g, '');
-                                // Обновляем состояние только числовым значением
-                                setProductData({ ...productData, price: onlyNums });
-                                if (isSubmitted) clearError('price');
-                            }}
+                            onChange={handleChange}
                             maxLength={12}
                             id="price"
                             inputMode="numeric"
@@ -371,6 +375,22 @@ export default function Product() {
                         />
                         <span className="ruble">₽</span>
                         {errors.price && <div className="error-message">{errors.price}</div>}
+                    </div>
+                </div>
+                <div className="product-item">
+                    <div className="product-title">Количество</div>
+                    <div className="product-item-right">
+                        <input className={`product-amount ${errors.amount ? 'error-input' : ''}`}
+                            type="number"
+                            name="amount"
+                            value={productData.amount}
+                            onChange={handleChange}
+                            min={1}
+                            max={1000}
+                            pattern="[0-9\d]*"
+                        />
+                        <span className="ruble">шт.</span>
+                        {errors.amount && <div className="error-message">{errors.amount}</div>}
                     </div>
                 </div>
                 <div className="product-item">
