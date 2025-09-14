@@ -12,7 +12,7 @@ export default function Product() {
         item_condition: "Не выбрано",
         type_ad: "Не выбрано",
         name: '',
-        price: '',
+        price: 0,
         amount: 1,
         desc: '',
         location: '',
@@ -65,19 +65,14 @@ export default function Product() {
         }
 
         // Валидация цены
-        if (!productData.price.trim()) {
+        if (!productData.price || productData.price <= 0) {
             newErrors.price = "Введите цену";
-        } else if (parseInt(productData.price) <= 0) {
-            newErrors.price = "Цена должна быть больше 0";
-        } else if (parseInt(productData.price) > 999999999) {
+        } else if (productData.price > 999999999) {
             newErrors.price = "Цена слишком большая";
         }
 
         // Валидация количество
-        if (!productData.price.trim()) {
-            newErrors.amount = "Введите количество";
-        } else if (parseInt(productData.amount) < 1 || parseInt(productData.amount) > 1000) {
-            console.log(productData.amount);
+        if (!productData.amount || productData.amount < 1 || productData.amount > 1000) {
             newErrors.amount = "Пожалуйста, введите количество от 1 до 1000";
         }
 
@@ -135,9 +130,15 @@ export default function Product() {
             clearError(name);
         }
         
-        if (name === 'price' || name === 'amount') {
+        if (name === 'price') {
             const onlyNums = event.target.value.replace(/[^0-9]/g, '');
-            setProductData({ ...productData, [name]: onlyNums });
+            setProductData({ ...productData, [name]: parseInt(onlyNums) || 0 });
+            return
+        }
+        
+        if (name === 'amount') {
+            const onlyNums = event.target.value.replace(/[^0-9]/g, '');
+            setProductData({ ...productData, [name]: parseInt(onlyNums) || 1 });
             return
         }
 
@@ -220,7 +221,7 @@ export default function Product() {
                 item_condition: "Не выбрано",
                 type_ad: "Не выбрано",
                 name: '',
-                price: '',
+                price: 0,
                 amount: 1,
                 desc: '',
                 location: '',
@@ -363,8 +364,8 @@ export default function Product() {
                             type="text"
                             name="price"
                             value={
-                                productData.price
-                                    ? Number(productData.price).toLocaleString('ru-RU')
+                                productData.price > 0
+                                    ? productData.price.toLocaleString('ru-RU')
                                     : ''
                             }
                             onChange={handleChange}
@@ -426,7 +427,7 @@ export default function Product() {
                             {photos.map((file, index) => (
                                 <div key={index} className="preview-item">
                                 <img src={URL.createObjectURL(file)} alt={`Preview ${index}`} className="preview-image" />
-                                <button onClick={() => removeFile(index)} className="remove-button"></button>
+                                <button type="button" onClick={() => removeFile(index)} className="remove-button"></button>
                                 </div>
                             ))}
                             </div>
