@@ -13,6 +13,7 @@ import Profile from './pages/profile/Profile';
 import Settings from './pages/profile/Settings';
 import NotFound from './pages/NotFound';
 import Product from './pages/Product';
+import EditProduct from './pages/EditProduct';
 import Favorites from './pages/profile/Favorites';
 import Messages from './pages/profile/Messages';
 import Support from './pages/profile/Support';
@@ -37,6 +38,7 @@ export default function App() {
                 {/* protected routes */}
                 <Route element={<RequireAuth />}>
                     <Route path="product" element={<Product/>} />
+                    <Route path="product/:id/edit" element={<EditProduct />}/>
                     <Route element={<ProfileLayout />}>
                         <Route path="profile" element={<Profile />}>
                             <Route index element={<InactiveProfile />} />
