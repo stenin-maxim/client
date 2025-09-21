@@ -1,0 +1,116 @@
+@use 'variables' as *;
+
+.ReactModal {
+    position: relative;
+    top: 30%;
+    left: 36%;
+    width: 480px;
+    &-location {
+        top: 12%;
+        left: 28%;
+    }
+    &-overlay {
+        position: fixed;
+        z-index: 2;
+        inset: 0px;
+        background-color: rgba(0, 0, 0, 0.75);
+    }
+    &-product {
+        top: 22%;
+        width: 350px;
+    }
+    h2 {
+        text-align: center;
+    }
+    h3 {
+        margin: 5px 0;
+        span {
+            font-size: 18px;
+            font-weight: 400;
+        }
+    }
+    .modal {
+        background-color: $gray-4;
+        padding: 20px 30px;
+        border-radius: 10px;
+
+        button {
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 10px;
+            margin: 5px;
+            padding: 10px;
+            font-size: 15px;
+            color: $black;
+        }
+
+        &-location {
+            background-color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            width: 700px;
+            position: relative;
+            .city {
+                cursor: pointer;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+            .all-city {
+                margin-top: 15px;
+            }
+        }
+
+        &-product {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            &__header {
+                background: $white;
+                box-shadow: 0px 0px 7px $gray-1;
+                border-radius: 10px;
+                border: none;
+            }
+            &__footer {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 10px;
+                width: 100%;
+            }
+            img {
+                width: 210px;
+                height: 190px;
+                border-radius: 10px 10px 0 0;
+            }
+            h2 {
+                margin: 25px 0 0;
+                font-size: 20px;
+            }
+            h3 {
+                font-weight: 600;
+            }
+            h3, h4 {
+                margin-left: 10px;
+                margin-top: 5px;
+                font-size: 18px;
+                font-weight: 500;
+            }
+            center {
+                font-size: 15px;
+                font-weight: 500;
+                color: $gray-1;
+                margin: 15px 0 10px;
+            }
+        }
+    }
+    .bi-x-lg {
+        position: absolute;
+        right: -38px;
+        color: white;
+        top: -30px;
+        font-size: 25px;
+        cursor: pointer;
+    }
+}
