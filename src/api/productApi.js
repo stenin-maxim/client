@@ -28,6 +28,14 @@ export const productApi = createApi({
                 url: 'product',
                 method: "GET",
             }), // Определяет конечную точку GET запроса
+            providesTags: ['Product'], // Помечаем данные тегом для инвалидации
+        }),
+        publishUserProduct: builder.mutation({
+            query: (productId) => ({
+                url: `product/publish/${productId}`,
+                method: "PATCH",
+            }),
+            invalidatesTags: ['Product'], // Инвалидирует кэш после публикации
         }),
         updateProduct: builder.mutation({
             query: ({ id, formData }) => ({
@@ -36,9 +44,39 @@ export const productApi = createApi({
                 body: formData,
             }),
             invalidatesTags: ['Product'], // Инвалидирует кэш после обновления
+            // Принудительно обновляем данные после успешного обновления
+            async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+                try {
+                    const { data } = await queryFulfilled;
+                    // Дополнительно обновляем кэш для конкретного продукта
+                    dispatch(
+                        productApi.util.updateQueryData('getUserProductAll', undefined, (draft) => {
+                            if (draft?.data) {
+                                const index = draft.data.findIndex(product => product.id === parseInt(id));
+                                if (index !== -1) {
+                                    draft.data[index] = { ...draft.data[index], ...data };
+                                }
+                            }
+                        })
+                    );
+                } catch (error) {
+                    console.error('Ошибка при обновлении кэша:', error);
+                }
+            },
         }),
+        deleteUserProduct: builder.mutation({
+            query: (productId) => ({ 
+                url: `product/${productId}`,
+                method: "DELETE",
+            })
+        })
     }),
 })
 
 // Экспортируем хуки, которые были автоматически сгенерированы RTK Query
-export const { useGetUserProductAllQuery, useUpdateProductMutation } = productApi;
+export const { 
+    useGetUserProductAllQuery,
+    useUpdateProductMutation,
+    usePublishUserProductMutation,
+    useDeleteUserProductMutation
+} = productApi;

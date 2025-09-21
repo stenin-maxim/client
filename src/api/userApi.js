@@ -106,35 +106,3 @@ export async function createProduct(formData) {
     }
     return response.json();
 }
-
-export async function getUserProduct() {
-    const response = await fetch(`${API_URL}product`, {
-        method: "GET",
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        }
-    });
-    return response.json();
-}
-
-export async function publishUserProduct(productId) { // опубликовать обьявление
-    const response = await fetch(`${API_URL}product/publish/${productId}`, {
-        method: "PATCH",
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        },
-        body: productId,
-    });
-    return response.json();
-}
-
-export async function deleteUserProduct(productId) {
-    const response = await fetch(`${API_URL}product/${productId}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-    });
-    return response.json();
-}
