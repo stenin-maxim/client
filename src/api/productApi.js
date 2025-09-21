@@ -11,12 +11,6 @@ export const productApi = createApi({
             if (token) {
                 headers.set('Authorization', `Bearer ${token}`);
                 headers.set('Accept', 'application/json');
-                
-                // Для PATCH запросов с FormData не устанавливаем Content-Type
-                // чтобы браузер автоматически установил multipart/form-data с boundary
-                if (endpoint !== 'updateProduct') {
-                    headers.set('Content-Type', 'application/json');
-                }
             }
             return headers;
         },
@@ -36,6 +30,15 @@ export const productApi = createApi({
                 method: "PATCH",
             }),
             invalidatesTags: ['Product'], // Инвалидирует кэш после публикации
+        }),
+        createProduct: builder.mutation({
+            query: (formData) => ({
+                url: 'product',
+                method: 'POST',
+                body: formData,
+                // Не устанавливаем Content-Type - браузер установит multipart/form-data автоматически
+            }),
+            invalidatesTags: ['Product'], // Инвалидирует кэш после создания
         }),
         updateProduct: builder.mutation({
             query: ({ id, formData }) => ({
@@ -76,6 +79,7 @@ export const productApi = createApi({
 // Экспортируем хуки, которые были автоматически сгенерированы RTK Query
 export const { 
     useGetUserProductAllQuery,
+    useCreateProductMutation,
     useUpdateProductMutation,
     usePublishUserProductMutation,
     useDeleteUserProductMutation
