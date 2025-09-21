@@ -1,7 +1,7 @@
 @use 'variables' as *;
 
 :root {
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: "FiraSans-Regular", system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -31,6 +31,10 @@ section {
     background: $white;
     border-radius: 10px;
     padding: 25px;
+}
+
+h4 {
+    margin: 0;
 }
 
 .btn-404 {
