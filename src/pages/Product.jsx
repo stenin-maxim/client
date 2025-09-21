@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import categories from "../assets/categories.json";
 import { Link, useNavigate } from 'react-router';
-import { createProduct } from '../api/userApi';
+import { useDispatch } from 'react-redux';
+import { useCreateProductMutation } from '../api/productApi';
+import { addUserProduct } from '../features/userProduct/userProductSlice';
 
 export default function Product() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
     const [photos, setPhotos] = useState([]);
     const [productData, setProductData] = useState({
         category: "Выберите категорию",
@@ -209,7 +213,12 @@ export default function Product() {
         });
 
         try {
-            await createProduct(formData);
+            const result = await createProduct(formData).unwrap();
+            
+            // Добавляем новый продукт в Redux state
+            if (result && result.data) {
+                dispatch(addUserProduct(result.data));
+            }
             
             alert('Объявление успешно размещено!');
             navigate("/profile");
@@ -471,8 +480,8 @@ export default function Product() {
                 </div>
                 <div className='product-item'>
                     <div className='product-title'></div>
-                    <input className='btn' type="submit" value="Сохранить" disabled={loading}/>
-                    {loading && <span className='save-text'>Сохраняем...</span>}
+                    <input className='btn' type="submit" value="Сохранить" disabled={loading || isCreating}/>
+                    {(loading || isCreating) && <span className='save-text'>Сохраняем...</span>}
                 </div>
             </form>
         </section>

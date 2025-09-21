@@ -36,6 +36,11 @@ const userProductSlice = createSlice({
                     id: id // Убеждаемся, что ID остается корректным
                 };
             }
+        },
+        addUserProduct(state, action) {
+            const newProduct = action.payload;
+            // Добавляем новый продукт в начало массива
+            state.userProducts = [newProduct, ...state.userProducts];
         }
     }
 })
@@ -44,6 +49,7 @@ export const {
     updateUserProductValue, 
     removeUserProduct, 
     getUserProductById,
-    updateUserProduct
+    updateUserProduct,
+    addUserProduct
 } = userProductSlice.actions;
 export default userProductSlice.reducer;
