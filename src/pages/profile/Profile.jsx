@@ -1,23 +1,30 @@
 import { useEffect } from 'react';
 import { NavLink, Outlet } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserProduct } from '../../api/userApi';
-import { setUserProducts } from '../../features/userProduct/userProductSlice';
+import { useGetUserProductAllQuery } from '../../api/productApi';
+import { setUserProductAll } from '../../features/userProduct/userProductSlice';
 
 export default function Profile() {
     const dispatch = useDispatch();
+    const { data: userProductAll, isLoading, error } = useGetUserProductAllQuery();
     const userProducts = useSelector(state => state.userProduct.userProducts);
     let userProductsActive = userProducts?.filter((item) => item.status === 'active');
     let userProductsNoActive = userProducts?.filter((item) => item.status === 'noactive');
+    
+    // Обновляем Redux store при получении данных из RTK Query
     useEffect(() => {
-        getUserProduct()
-            .then(data => {
-                dispatch(setUserProducts(data.data))
-            })
-            .catch(error => {
-                console.error('Error product user:', error);
-            });
-    }, []) // dependency array [dispatch, setUserProducts] гарантирует, что эффект сработает только при изменении dispatch или setUserProducts
+        if (userProductAll?.data) {
+            dispatch(setUserProductAll(userProductAll.data));
+        }
+    }, [userProductAll, dispatch]);
+    
+    if (isLoading) {
+        return <div>Загрузка...</div>;
+    }
+
+    if (error) {
+        return <div>Ошибка загрузки данных: {error.message}</div>;
+    }
 
     return (
         <>

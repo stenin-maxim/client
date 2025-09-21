@@ -1,40 +1,44 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router';
-import { deleteUserProduct, publishUserProduct } from '../../api/userApi';
+import { usePublishUserProductMutation, useDeleteUserProductMutation } from '../../api/productApi';
 import { updateUserProductValue, removeUserProduct } from '../../features/userProduct/userProductSlice';
 
 export default function InactiveProfile() {
     const dispatch = useDispatch();
     const userProducts = useSelector(state => state.userProduct.userProducts);
     const [loading, setLoading] = useState(false); // отменить многочисленное нажатие кнопки, при отправке данных
+    const [publishUserProduct, { isLoading: isPublishing }] = usePublishUserProductMutation();
+    const [deleteUserProduct, { isLoading: isDelete }] = useDeleteUserProductMutation();
     let userProductsNoActive = userProducts?.filter((item) => item.status === 'noactive');
-
-    const publish = (productId) => {
+    
+    const publish = async (productId) => {
         setLoading(true);
-        publishUserProduct(productId).then(data => {
-            dispatch(updateUserProductValue({ id: productId, value: data.data.status }))
-            alert(data.message);
-        }).catch(error => {
-            console.log(error);
-        }).finally(function() {
+        try {
+            const result = await publishUserProduct(productId).unwrap();
+            dispatch(updateUserProductValue({ id: productId, value: result.data.status }));
+            alert(result.message);
+        } catch (error) {
+            alert(`Ошибка публикации: ${error.message || 'Неизвестная ошибка'}`);
+        } finally {
             setLoading(false);
-        })
+        }
     }
 
-    const deleteProduct = (productId) => {
-        let result = confirm("Вы действительно хотите удалить объявление?");
+    const deleteProduct = async (productId) => {
         setLoading(true);
+        let confirmResult = confirm("Вы действительно хотите удалить объявление?");
 
-        if (result) {
-            deleteUserProduct(productId).then(data => {
+        if (confirmResult) {
+            try {
+                const result = await deleteUserProduct(productId).unwrap();
                 dispatch(removeUserProduct(productId));
-                alert(data.message);
-            }).catch(error => {
-                console.log(error);
-            }).finally(function() {
+                alert(result.message);
+            } catch (error) {
+                console.error('Ошибка удаление продукта:', error);
+            } finally {
                 setLoading(false);
-            })
+            }
         }
     }
 
@@ -60,10 +64,9 @@ export default function InactiveProfile() {
                             <div className="profile-item__menu">
                                 <i className="bi bi-three-dots"></i>
                                 <ul>
-                                    <li><button onClick={() => publish(item.id)} disabled={loading}>Опубликовать</button></li>
-                                    <li><button disabled={loading}>Редактировать</button></li>
-                                    <li><button onClick={() => deleteProduct(item.id)} disabled={loading}>Удалить</button></li>
-                                    <li><button disabled={loading}>Уже не актульно</button></li>
+                                    <li><button onClick={() => publish(item.id)} disabled={loading || isPublishing}>Опубликовать</button></li>
+                                    <li><Link to={`/product/${item.id}/edit`}><button>Редактировать</button></Link></li>
+                                    <li><button onClick={() => deleteProduct(item.id)} disabled={loading || isDelete }>Удалить</button></li>
                                 </ul>
                             </div>
                             <div className='profile-item__group'>
