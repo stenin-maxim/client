@@ -302,10 +302,14 @@ export default function EditProduct() {
             setRemovedImages([]);
             setPhotos([]);
             
-            // Обновляем Redux state с новыми данными продукта
+            // Обновляем Redux state с данными, полученными с сервера
+            // Используем полные данные из result, которые содержат актуальную информацию с сервера
+            // Если result не содержит всех полей, дополняем их из productData
             const updatedProductData = {
-                ...productData,
-                product_image: updatedExistingImages
+                ...productData, // Базовые данные формы
+                ...result, // Данные с сервера (имеют приоритет)
+                product_image: updatedExistingImages, // Локально обновленные изображения
+                id: parseInt(id) // Убеждаемся, что ID корректный
             };
             
             dispatch(updateUserProduct({ 
