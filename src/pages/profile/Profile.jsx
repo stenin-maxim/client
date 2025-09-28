@@ -10,6 +10,7 @@ export default function Profile() {
     const userProducts = useSelector(state => state.userProduct.userProducts);
     let userProductsActive = userProducts?.filter((item) => item.status === 'active');
     let userProductsNoActive = userProducts?.filter((item) => item.status === 'noactive');
+    let userProductsSold = userProducts?.filter((item) => item.status === 'sold');
     
     // Обновляем Redux store при получении данных из RTK Query
     useEffect(() => {
@@ -30,8 +31,9 @@ export default function Profile() {
         <>
             <h2>Мои объявления</h2>
             <div className="profile-buttons">
-                <NavLink to="/profile" end>Неактивные<sup>{userProductsNoActive?.length}</sup></NavLink>
-                <NavLink to="/profile/active">Активные<sup>{userProductsActive?.length}</sup></NavLink>
+                <NavLink to="/profile" end>Неактивные<sup>{userProductsNoActive?.length > 0 ? userProductsNoActive?.length : ''}</sup></NavLink>
+                <NavLink to="/profile/active">Активные<sup>{userProductsActive?.length > 0 ? userProductsActive?.length : ''}</sup></NavLink>
+                <NavLink to="/profile/sold">Проданные<sup>{userProductsSold?.length > 0 ? userProductsSold?.length : ''}</sup></NavLink>
             </div>
             <Outlet />
         </>
