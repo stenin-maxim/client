@@ -24,13 +24,6 @@ export const productApi = createApi({
             }), // Определяет конечную точку GET запроса
             providesTags: ['Product'], // Помечаем данные тегом для инвалидации
         }),
-        publishUserProduct: builder.mutation({
-            query: (productId) => ({
-                url: `product/publish/${productId}`,
-                method: "PATCH",
-            }),
-            invalidatesTags: ['Product'], // Инвалидирует кэш после публикации
-        }),
         createProduct: builder.mutation({
             query: (formData) => ({
                 url: 'product',
@@ -72,6 +65,13 @@ export const productApi = createApi({
                 url: `product/${productId}`,
                 method: "DELETE",
             })
+        }),
+        statusProduct: builder.mutation({
+            query: ({ productId, status }) => ({
+                url: `product/status/${productId}/${status}`,
+                method: "PATCH",
+            }),
+            invalidatesTags: ['Product'], // Инвалидирует кэш после публикации
         })
     }),
 })
@@ -81,6 +81,6 @@ export const {
     useGetUserProductAllQuery,
     useCreateProductMutation,
     useUpdateProductMutation,
-    usePublishUserProductMutation,
-    useDeleteUserProductMutation
+    useDeleteUserProductMutation,
+    useStatusProductMutation,
 } = productApi;
