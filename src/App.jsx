@@ -17,8 +17,9 @@ import EditProduct from './pages/EditProduct';
 import Favorites from './pages/profile/Favorites';
 import Messages from './pages/profile/Messages';
 import Support from './pages/profile/Support';
-import InactiveProfile from './components/profile/InactiveProfile';
-import ActiveProfile from './components/profile/ActiveProfile';
+import InactiveProduct from './components/profile/InactiveProduct';
+import ActiveProduct from './components/profile/ActiveProduct';
+import SoldProduct from './components/profile/SoldProduct';
 import AdsFavorites from './components/profile/AdsFavorites';
 import SellersFavorites from './components/profile/SellersFavorites';
 import VerifyEmail from './pages/VerifyEmail';
@@ -41,8 +42,9 @@ export default function App() {
                     <Route path="product/:id/edit" element={<EditProduct />}/>
                     <Route element={<ProfileLayout />}>
                         <Route path="profile" element={<Profile />}>
-                            <Route index element={<InactiveProfile />} />
-                            <Route path="active" element={<ActiveProfile />} />
+                            <Route index element={<InactiveProduct />} />
+                            <Route path="active" element={<ActiveProduct />} />
+                            <Route path="sold" element={<SoldProduct />} />
                         </Route>
                         <Route path="favorites" element={<Favorites />}>
                             <Route index element={<AdsFavorites />} />
