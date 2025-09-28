@@ -95,7 +95,7 @@ export default function ActiveProduct() {
                                     </div>
                                     <div className='modal-product__footer'>
                                         <button onClick={() => setStatusProduct(product.id, 'sold')}>Я продал на {APP_NAME}</button>
-                                        <button>Я продал в другом месте</button>
+                                        <button onClick={() => setStatusProduct(product.id, 'sold')}>Я продал в другом месте</button>
                                         <button onClick={() => setStatusProduct(product.id, 'noactive')} disabled={loading}>Другая причина</button>
                                     </div>
                                 </div>

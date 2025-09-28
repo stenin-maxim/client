@@ -68,8 +68,9 @@ export const productApi = createApi({
         }),
         statusProduct: builder.mutation({
             query: ({ productId, status }) => ({
-                url: `product/status/${productId}/${status}`,
+                url: `product/${productId}/status`,
                 method: "PATCH",
+                body: {status: status},
             }),
             invalidatesTags: ['Product'], // Инвалидирует кэш после публикации
         })

@@ -11,7 +11,6 @@ export default function SoldProduct() {
     const [deleteUserProduct, { isLoading: isDelete }] = useDeleteUserProductMutation();
     let userProductsSold = userProducts?.filter((item) => item.status === 'sold');
 
-
     const deleteProduct = async (productId) => {
         setLoading(true);
         let confirmResult = confirm("Вы действительно хотите удалить объявление?");
@@ -31,7 +30,7 @@ export default function SoldProduct() {
 
     return (
         <>
-            {userProductsSold.length > 0 ? 
+            {userProductsSold?.length > 0 ? 
                 <>
                     {userProductsSold?.map((item) => {
                         return (
