@@ -7,7 +7,8 @@ export default function ProductCard({
     actions = [], 
     onActionClick,
     showExpiresAt = false,
-    showSoldText = false 
+    showSoldText = false,
+    showInactiveText = false 
 }) {
     return (
         <div className="profile-item" key={item.id}>
@@ -39,6 +40,11 @@ export default function ProductCard({
                 )}
                 {showSoldText && (
                     <div className="sold-text">Продано</div>
+                )}
+                {showInactiveText && (
+                    <div className="inactive-text" 
+                        title="Объявление было снято с публикации и помещено в архив. Если объявление по-прежнему актуально, обновите в нем информацию и опубликуйте повторно.">
+                        Приостановлено</div>
                 )}
                 <div className='profile-item__group'>
                     <div className='profile-item__views'>

@@ -60,6 +60,7 @@ export default function AllUserProduct() {
                         to: action.type === 'link' ? `/product/${item.id}/edit` : undefined
                     }))}
                     onActionClick={handleActionClick}
+                    showInactiveText={true}
                 />
             ))}
 

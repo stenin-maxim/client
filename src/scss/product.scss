@@ -98,13 +98,21 @@
     }
 }
 
-.sold-text {
-    background: $green;
+.sold-text, .inactive-text {
     padding: 5px 10px;
     border-radius: 10px;
-    color: $white;
     text-transform: uppercase;
     font-size: 15px;
+}
+
+.sold-text {
+    background: $green;
+    color: $white;
+}
+
+.inactive-text {
+    background: $yellow;
+    color: $black;
 }
 
 .custom-file-upload {

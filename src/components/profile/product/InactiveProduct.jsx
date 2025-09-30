@@ -35,6 +35,7 @@ export default function InactiveProduct() {
                                 to: action.type === 'link' ? `/product/${item.id}/edit` : undefined
                             }))}
                             onActionClick={handleActionClick}
+                            showInactiveText={true}
                         />
                     ))}
                 </> : <center>Заблокированные и неактивные объявления будут отображаться на этой странице.</center>
