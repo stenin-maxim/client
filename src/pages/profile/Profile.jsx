@@ -7,10 +7,10 @@ import { setUserProductAll } from '../../features/userProduct/userProductSlice';
 export default function Profile() {
     const dispatch = useDispatch();
     const { data: userProductAll, isLoading, error } = useGetUserProductAllQuery();
-    const userProducts = useSelector(state => state.userProduct.userProducts);
-    let userProductsActive = userProducts?.filter((item) => item.status === 'active');
-    let userProductsNoActive = userProducts?.filter((item) => item.status === 'noactive');
-    let userProductsSold = userProducts?.filter((item) => item.status === 'sold');
+    const userProducts = useSelector(state => state.userProduct.userProducts) || [];
+    let userProductsInactive = userProducts.filter((item) => item.status === 'inactive');
+    let userProductsActive = userProducts.filter((item) => item.status === 'active');
+    let userProductsSold = userProducts.filter((item) => item.status === 'sold');
     
     // Обновляем Redux store при получении данных из RTK Query
     useEffect(() => {
@@ -31,7 +31,8 @@ export default function Profile() {
         <>
             <h2>Мои объявления</h2>
             <div className="profile-buttons">
-                <NavLink to="/profile" end>Неактивные<sup>{userProductsNoActive?.length > 0 ? userProductsNoActive?.length : ''}</sup></NavLink>
+                <NavLink to="/profile" end>Всего<sup>{userProducts?.length > 0 ? userProducts?.length : ''}</sup></NavLink>
+                <NavLink to="/profile/inactive">Неактивные<sup>{userProductsInactive?.length > 0 ? userProductsInactive?.length : ''}</sup></NavLink>
                 <NavLink to="/profile/active">Активные<sup>{userProductsActive?.length > 0 ? userProductsActive?.length : ''}</sup></NavLink>
                 <NavLink to="/profile/sold">Проданные<sup>{userProductsSold?.length > 0 ? userProductsSold?.length : ''}</sup></NavLink>
             </div>

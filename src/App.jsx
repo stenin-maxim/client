@@ -12,14 +12,15 @@ import Restore from './pages/auth/Restore';
 import Profile from './pages/profile/Profile';
 import Settings from './pages/profile/Settings';
 import NotFound from './pages/NotFound';
-import Product from './pages/Product';
+import CreateProduct from './pages/CreateProduct';
 import EditProduct from './pages/EditProduct';
 import Favorites from './pages/profile/Favorites';
 import Messages from './pages/profile/Messages';
 import Support from './pages/profile/Support';
-import InactiveProduct from './components/profile/InactiveProduct';
-import ActiveProduct from './components/profile/ActiveProduct';
-import SoldProduct from './components/profile/SoldProduct';
+import AllUserProduct from './components/profile/product/AllUserProduct';
+import InactiveProduct from './components/profile/product/InactiveProduct';
+import ActiveProduct from './components/profile/product/ActiveProduct';
+import SoldProduct from './components/profile/product/SoldProduct';
 import AdsFavorites from './components/profile/AdsFavorites';
 import SellersFavorites from './components/profile/SellersFavorites';
 import VerifyEmail from './pages/VerifyEmail';
@@ -38,11 +39,12 @@ export default function App() {
 
                 {/* protected routes */}
                 <Route element={<RequireAuth />}>
-                    <Route path="product" element={<Product/>} />
+                    <Route path="product" element={<CreateProduct/>} />
                     <Route path="product/:id/edit" element={<EditProduct />}/>
                     <Route element={<ProfileLayout />}>
                         <Route path="profile" element={<Profile />}>
-                            <Route index element={<InactiveProduct />} />
+                            <Route index element={<AllUserProduct />} />
+                            <Route path="inactive" element={<InactiveProduct />} />
                             <Route path="active" element={<ActiveProduct />} />
                             <Route path="sold" element={<SoldProduct />} />
                         </Route>

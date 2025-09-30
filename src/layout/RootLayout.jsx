@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router'
 import { useSelector, useDispatch } from "react-redux"
 import { logout } from '../features/auth/authSlice'
-import LocationModal from '../components/LocationModal';
+import LocationModal from '../components/modal/LocationModal';
 import Menu from '../components/Menu';
 import SearchForm from '../components/form/SearchForm';
 import Avatar from '../components/Avatar/Avatar';

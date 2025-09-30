@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useCreateProductMutation } from '../api/productApi';
 import { addUserProduct } from '../features/userProduct/userProductSlice';
 
-export default function Product() {
+export default function CreateProduct() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
