@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
-import { useProductActions } from '../../../hooks/useProductActions';
-import { useUnpublishModal } from '../../../hooks/useUnpublishModal';
+import { useProductActions } from '@/hooks/useProductActions';
+import { useUnpublishModal } from '@/hooks/useUnpublishModal';
 import ProductCard from './ProductCard';
-import UnpublishModal from '../../modal/UnpublishModal';
+import UnpublishModal from '@/components/modal/UnpublishModal';
 
 export default function AllUserProduct() {
     const userProducts = useSelector(state => state.userProduct.userProducts) || [];

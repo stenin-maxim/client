@@ -14,12 +14,12 @@ export default function ProductCard({
         <div className="profile-item" key={item.id}>
             <div className='profile-item__left'>
                 <div>
-                    <Link to="">
+                    <Link to={`/product/${item.id}`}>
                         <img src={item.product_image[0].url} alt={item.name} />
                     </Link>
                 </div>
                 <div className="profile-item__desc">
-                    <h3><Link to="">{item.name}</Link></h3>
+                    <h3><Link to={`/product/${item.id}`}>{item.name}</Link></h3>
                     <h4 className="price">{item.price.toLocaleString('ru-RU')}</h4>
                     <div>Кол-во: {item.amount} шт.</div>
                     <div>{item.location}</div>
