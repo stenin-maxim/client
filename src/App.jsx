@@ -12,6 +12,7 @@ import Restore from './pages/auth/Restore';
 import Profile from './pages/profile/Profile';
 import Settings from './pages/profile/Settings';
 import NotFound from './pages/NotFound';
+import Product from './pages/Product';
 import CreateProduct from './pages/CreateProduct';
 import EditProduct from './pages/EditProduct';
 import Favorites from './pages/profile/Favorites';
@@ -41,6 +42,7 @@ export default function App() {
                 <Route element={<RequireAuth />}>
                     <Route path="product" element={<CreateProduct/>} />
                     <Route path="product/:id/edit" element={<EditProduct />}/>
+                    <Route path="product/:id" element={<Product />}/>
                     <Route element={<ProfileLayout />}>
                         <Route path="profile" element={<Profile />}>
                             <Route index element={<AllUserProduct />} />

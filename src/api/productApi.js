@@ -17,6 +17,13 @@ export const productApi = createApi({
     }),
     tagTypes: ['Product'], // Теги для кэширования
     endpoints: (builder) => ({
+        getProductById: builder.query({
+            query: (id) => ({
+                url: `product/${id}`,
+                method: 'GET',
+            }),
+            providesTags: ['Product'],
+        }),
         getUserProductAll: builder.query({
             query: () => ({
                 url: 'product',
@@ -78,7 +85,8 @@ export const productApi = createApi({
 })
 
 // Экспортируем хуки, которые были автоматически сгенерированы RTK Query
-export const { 
+export const {
+    useGetProductByIdQuery,
     useGetUserProductAllQuery,
     useCreateProductMutation,
     useUpdateProductMutation,
