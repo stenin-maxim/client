@@ -1,5 +1,9 @@
 @use 'variables' as *;
 
+.profile {
+    h2 { margin-bottom: 15px; }
+}
+
 .profile-buttons {
     margin: 10px 0 25px;
     border-bottom: 1px solid $gray-3;

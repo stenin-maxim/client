@@ -25,22 +25,25 @@ export const useProductActions = () => {
     };
 
     const deleteProduct = async (productId) => {
-        setLoading(true);
         let confirmResult = confirm("Вы действительно хотите удалить объявление?");
-
-        if (confirmResult) {
-            try {
-                const result = await deleteUserProduct(productId).unwrap();
-                dispatch(removeUserProduct(productId));
-                alert(result.message);
-                return result;
-            } catch (error) {
-                console.error('Ошибка удаления продукта:', error);
-                throw error;
-            } finally {
-                setLoading(false);
-            }
+        
+        if (!confirmResult) {
+            return;
         }
+
+        setLoading(true);
+        try {
+            const result = await deleteUserProduct(productId).unwrap();
+            dispatch(removeUserProduct(productId));
+            alert(result.message);
+            return result;
+        } catch (error) {
+            console.error('Ошибка удаления продукта:', error);
+            throw error;
+        } finally {
+            setLoading(false);
+        }
+
     };
 
     return {

@@ -50,7 +50,7 @@ export default function AllUserProduct() {
 
     return (
         <>
-            <h2>Неактивные</h2>
+            {userProductsInactive.length > 0 ? (<h2>Неактивные</h2>) : ''}
             {userProductsInactive?.map((item) => (
                 <ProductCard
                     key={item.id}
@@ -64,7 +64,7 @@ export default function AllUserProduct() {
                 />
             ))}
 
-            <h2>Активные</h2>
+            {userProductsActive.length > 0 ? (<h2>Активные</h2>) : ''}
             {userProductsActive?.map((item) => (
                 <ProductCard
                     key={item.id}
@@ -86,7 +86,7 @@ export default function AllUserProduct() {
                 loading={loading}
             />
 
-            <h2>Проданные</h2>
+            {userProductsActive.length > 0 ? (<h2>Проданные</h2>) : ''}
             {userProductsSold?.map((item) => (
                 <ProductCard
                     key={item.id}

@@ -18,12 +18,6 @@ const userProductSlice = createSlice({
             let userProductId = action.payload;
             state.userProducts = state.userProducts.filter(item => item.id !== userProductId);
         },
-        getUserProductById(state, action) {
-            const userProductId = action.payload;
-            const product = state.userProducts.find(item => item.id === userProductId);
-
-            return { ...state, currentProduct: product };
-        },
         updateUserProduct(state, action) {
             const { id, updatedProduct } = action.payload;
             const index = state.userProducts.findIndex(item => item.id === id);

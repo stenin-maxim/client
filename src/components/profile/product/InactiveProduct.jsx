@@ -19,7 +19,7 @@ export default function InactiveProduct() {
     const actions = [
         { type: 'link', label: 'Редактировать', to: '' },
         { type: 'button', label: 'Опубликовать повторно', disabled: loading || isStatusProduct },
-        { type: 'button', label: 'Удалить', disabled: loading || isDelete }
+        { type: 'button', label: 'Удалить обявление', disabled: loading || isDelete }
     ];
 
     return (
