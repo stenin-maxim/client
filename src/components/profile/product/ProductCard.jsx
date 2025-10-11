@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
 import ProductActionsMenu from './ProductActionsMenu';
 
 export default function ProductCard({ 
@@ -10,16 +10,24 @@ export default function ProductCard({
     showSoldText = false,
     showInactiveText = false 
 }) {
+    const navigate = useNavigate();
+    const handleCardClick = (e) => {
+        // Предотвращаем навигацию если клик был по меню действий
+        if (e.target.closest('.profile-item__menu')) {
+            return;
+        }
+        navigate(`/product/${item.id}`);
+    };
+
     return (
-        <div className="profile-item" key={item.id}>
+        <div className="profile-item"
+            key={item.id}
+            onClick={handleCardClick}
+        >
             <div className='profile-item__left'>
-                <div>
-                    <Link to={`/product/${item.id}`}>
-                        <img src={item.product_image[0].url} alt={item.name} />
-                    </Link>
-                </div>
+                <img src={item.product_image[0].url} alt={item.name} loading="lazy" />
                 <div className="profile-item__desc">
-                    <h3><Link to={`/product/${item.id}`}>{item.name}</Link></h3>
+                    <h3>{item.name}</h3>
                     <h4 className="price">{item.price.toLocaleString('ru-RU')}</h4>
                     <div>Кол-во: {item.amount} шт.</div>
                     <div>{item.location}</div>
