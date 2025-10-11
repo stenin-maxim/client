@@ -59,14 +59,15 @@
 .header-bottom {
     margin: 20px 0;
     position: relative;
-    .bi-list {
-        font-size: 18px;
+    .bi-list, .bi-x {
+        font-size: 20px;
         padding-right: 9px;
         position: relative;
         top: 1px;
     }
-	.btn-category {
-		background: $pink;
+
+    .btn-category {
+        background: $pink;
         padding: 10px 20px;
         border: none;
         color: #fff;
@@ -74,60 +75,87 @@
         font-size: 16px;
         font-weight: 500;
         cursor: pointer;
-	}
-    .category {
+    }
+    
+    .menu-category {
         position: absolute;
-        z-index: 2;
+        z-index: 1000;
         background: $white;
         width: 100%;
         top: 60px;
         padding-bottom: 26px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        
+        &-list {
+            margin: 10px 0 0;
+            position: relative;
+        }
+        
         &-item {
             background-repeat: no-repeat;
             background-position: 16px 8px;
             background-size: 24px;
             padding: 8px 22px 8px 52px;
-            cursor: pointer;
-            width: 180px;
+            width: 200px;
+            
             &:hover {
                 background-color: $gray-3;
             }
+            
+            a {
+                text-decoration: none;
+                color: inherit;
+                height: 100%;
+                transition: color 0.2s ease;
+                cursor: pointer;
+                
+                &:hover {
+                    text-decoration: underline;
+                    color: $blue;
+                }
+            }
         }
+        
         h4 {
             font-weight: 600;
             font-size: 20px;
             line-height: 1.6;
             margin: 0 0 5px 20px;
         }
-        ul {
-            padding: 0;
-            margin: 0;
-            li {
-                list-style: none;;
-            }
-        }
-        a {
-            text-decoration: none;
-            &:hover {
-                text-decoration: underline;
-                color: $blue
-            }
-        }
     }
-    .subcategory {
+    
+    .menu-subcategory {
         display: none;
         position: absolute;
-        top: 3px;
-        left: 500px;
-        height: 100%;
-        padding-left: 50px !important;
+        top: 0;
+        left: 270px;
+        min-width: 320px;
+        background: $white;
+        z-index: 1001;
+        padding-bottom: 15px;
+        
+        &.active {
+            display: block;
+        }
+        
         li {
-            padding: 5px 5px 5px 20px;
+            padding: 6px 20px;
+            transition: background-color 0.2s ease;
+            
+            a {
+                text-decoration: none;
+                color: inherit;
+                transition: color 0.2s ease;
+                color: $blue;
+                
+                &:hover {
+                    color: $blue;
+                    text-decoration: underline;
+                }
+            }
         }
     }
-    .active {
-        display: block;
-    }
+    
 	.bi-search {
 		position: relative;
 		top: 10px;

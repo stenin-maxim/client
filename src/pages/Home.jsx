@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router'
 import categories from '../assets/categories.json'
 
 export default function Home() {
@@ -32,13 +33,13 @@ export default function Home() {
         }
     };
 
-    // Функция для прокрутки к определенной позиции
-    const scrollToCategory = (index) => {
-        if (categoriesScrollRef.current) {
-            const itemWidth = 170; // ширина элемента + gap
-            const scrollPosition = index * itemWidth;
-            categoriesScrollRef.current.scrollTo({ left: scrollPosition, behavior: 'smooth' });
-        }
+    // Функция для создания URL-безопасного slug
+    const createSlug = (text) => {
+        return text
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .trim();
     };
 
     return (
@@ -55,14 +56,17 @@ export default function Home() {
                             <i className="bi bi-chevron-left"></i>
                         </button>
                         <div className="categories-scroll" ref={categoriesScrollRef}>
-                            {categories.categories.map((item) => (
-                                <div key={item.category} className="category-item">
-                                    <a href="">
-                                        <img className="img-category" src={item.bigImg} alt={item.category}/>
-                                        <span>{item.category}</span>
-                                    </a>
-                                </div>
-                            ))}
+                            {categories.categories.map((item) => {
+                                const categorySlug = createSlug(item.category);
+                                return (
+                                    <div key={item.category} className="home-category-item">
+                                        <Link to={`/category/${categorySlug}`}>
+                                            <img className="img-category" src={item.bigImg} alt={item.category}/>
+                                            <span>{item.category}</span>
+                                        </Link>
+                                    </div>
+                                )
+                            })}
                         </div>
                         <button 
                             className="scroll-btn scroll-btn-right" 
