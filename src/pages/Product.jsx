@@ -91,7 +91,7 @@ export default function Product() {
                     </div>
                     <div className="col-3">
                         <div className='product-user__header'>
-                            <h2 className='price'>{product?.price}</h2>
+                            <h2 className='price'>{product?.price.toLocaleString('ru-RU')}</h2>
                         </div>
                         <table>
                             {(product?.status === 'inactive' || product?.status === 'active') && (

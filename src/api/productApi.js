@@ -30,6 +30,8 @@ export const productApi = createApi({
                 method: "GET",
             }), // Определяет конечную точку GET запроса
             providesTags: ['Product'], // Помечаем данные тегом для инвалидации
+            keepUnusedDataFor: 300, // кэш 5 минут
+            refetchOnMountOrArgChange: false, // не перезапрашивать без надобности
         }),
         createProduct: builder.mutation({
             query: (formData) => ({
