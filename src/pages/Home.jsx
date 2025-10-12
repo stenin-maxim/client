@@ -1,11 +1,17 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router'
-import categories from '../assets/categories.json'
+import { useSelector } from 'react-redux'
+import { useGetCategoriesQuery } from '@/api/categoriesApi'
 
 export default function Home() {
     const [ads, setAds] = useState([]);
     const [error, setError] = useState(null);
     const categoriesScrollRef = useRef(null);
+
+    // Получаем категории из Redux state
+    const { categories, loading: categoriesLoading, error: categoriesError } = useSelector(state => state.categories);
+    
+    useGetCategoriesQuery(); // Загружаем категории при монтировании компонента
 
     useEffect(() => {
         fetch(import.meta.env.VITE_API_URL + "public/ads")
@@ -33,15 +39,6 @@ export default function Home() {
         }
     };
 
-    // Функция для создания URL-безопасного slug
-    const createSlug = (text) => {
-        return text
-            .toLowerCase()
-            .replace(/[^\w\s-]/g, '')
-            .replace(/\s+/g, '-')
-            .trim();
-    };
-
     return (
         <>
             <div className="container">
@@ -56,13 +53,15 @@ export default function Home() {
                             <i className="bi bi-chevron-left"></i>
                         </button>
                         <div className="categories-scroll" ref={categoriesScrollRef}>
-                            {categories.categories.map((item) => {
-                                const categorySlug = createSlug(item.category);
+                            {categories.map((item) => {
                                 return (
-                                    <div key={item.category} className="home-category-item">
-                                        <Link to={`/category/${categorySlug}`}>
-                                            <img className="img-category" src={item.bigImg} alt={item.category}/>
-                                            <span>{item.category}</span>
+                                    <div key={item.id} className="home-category-item">
+                                        <Link to={`/category/${item.slug}`}>
+                                            <img className="img-category"
+                                                src={item.img}
+                                                alt={item.name}
+                                            />
+                                            <span>{item.name}</span>
                                         </Link>
                                     </div>
                                 )

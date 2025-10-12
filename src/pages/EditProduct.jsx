@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserProductAll, updateUserProduct } from '../features/userProduct/userProductSlice';
 import { useGetUserProductAllQuery, useUpdateProductMutation } from '../api/productApi';
-import categories from "../assets/categories.json";
+import { useGetCategoriesQuery } from '@/api/categoriesApi';
+
 
 export default function EditProduct() {
     const { id } = useParams(); // Получаем id из параметров маршрута
@@ -12,14 +13,18 @@ export default function EditProduct() {
     const { data: userProductAll, isLoading: isLoadingPosts, error: errorPosts } = useGetUserProductAllQuery();
     const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
     const userProducts = useSelector(state => state.userProduct.userProducts);
+    const { categories, loading: categoriesLoading, error: categoriesError } = useSelector(state => state.categories);
+    useGetCategoriesQuery(); // Загружаем категории при монтировании компонента
     
     // Состояние для формы редактирования
     const [photos, setPhotos] = useState([]); // Новые загружаемые файлы
     const [existingImages, setExistingImages] = useState([]); // Существующие изображения
     const [removedImages, setRemovedImages] = useState([]); // Удаленные изображения
     const [productData, setProductData] = useState({
-        category: "Выберите категорию",
-        subcategory: "Выберите подкатегорию",
+        category_id: null, // ID категории
+        categoryName: "Выберите категорию", // Название для отображения
+        subcategory_id: null, // ID подкатегории
+        subcategoryName: "Выберите подкатегорию", // Название для отображения
         item_condition: "Не выбрано",
         type_ad: "Не выбрано",
         name: '',
@@ -47,12 +52,25 @@ export default function EditProduct() {
     }, [userProductAll, dispatch]);
 
     useEffect(() => {
-        if (userProducts && id) {
+        if (userProducts && id && categories.length > 0) {
             const product = userProducts.find(item => item.id === parseInt(id));
             if (product) {
+                // Находим категорию по ID
+                const selectedCategory = categories.find(cat => cat.id === product.category_id);
+                const categoryName = selectedCategory ? selectedCategory.name : "Выберите категорию";
+                
+                // Находим подкатегорию по ID
+                let subcategoryName = "Выберите подкатегорию";
+                if (selectedCategory && product.subcategory_id && selectedCategory.subcategories) {
+                    const selectedSubcategory = selectedCategory.subcategories.find(sub => sub.id === product.subcategory_id);
+                    subcategoryName = selectedSubcategory ? selectedSubcategory.name : "Выберите подкатегорию";
+                }
+                
                 setProductData({
-                    category: product.category || "Выберите категорию",
-                    subcategory: product.subcategory || "Выберите подкатегорию",
+                    category_id: product.category_id || null,
+                    categoryName: categoryName,
+                    subcategory_id: product.subcategory_id || null,
+                    subcategoryName: subcategoryName,
                     item_condition: product.item_condition || "Не выбрано",
                     type_ad: product.type_ad || "Не выбрано",
                     name: product.name || '',
@@ -75,7 +93,33 @@ export default function EditProduct() {
                 setRemovedImages([]);
             }
         }
-    }, [userProducts, id]);
+    }, [userProducts, id, categories]);
+
+    // Показываем загрузку если категории еще не загружены
+    if (categoriesLoading && categories.length === 0) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
+                        <div className="loading">Загрузка категорий...</div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Показываем ошибку если не удалось загрузить категории
+    if (categoriesError && categories.length === 0) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
+                        <div className="error">Ошибка загрузки категорий: {categoriesError}</div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     if (isLoadingPosts) {
         return <div>Загрузка...</div>;
@@ -97,11 +141,11 @@ export default function EditProduct() {
     const validateForm = () => {
         const newErrors = {};
 
-        if (productData.category === "Выберите категорию") {
+        if (!productData.category_id) {
             newErrors.category = "Выберите категорию";
         }
 
-        if (productData.category !== "Выберите категорию" && productData.subcategory === "Выберите подкатегорию") {
+        if (productData.category_id && !productData.subcategory_id) {
             newErrors.subcategory = "Выберите подкатегорию";
         }
 
@@ -278,12 +322,18 @@ export default function EditProduct() {
             });
         }
 
-        // Добавляем остальные данные формы
-        Object.keys(productData).forEach(key => {
-            if (key !== 'autopublish') {
-                formData.append(key, productData[key]);
-            } else {
-                formData.append(key, productData[key] ? 'true' : 'false');
+        // Добавляем остальные данные формы (исключаем поля для отображения)
+        const submitData = {
+            ...productData,
+            // Убираем поля для отображения, оставляем только ID
+            categoryName: undefined,
+            subcategoryName: undefined,
+            autopublish: productData.autopublish ? 'true' : 'false'
+        };
+
+        Object.keys(submitData).forEach(key => {
+            if (submitData[key] !== undefined) {
+                formData.append(key, submitData[key]);
             }
         });
         formData.append("_method", "PATCH");
@@ -328,26 +378,31 @@ export default function EditProduct() {
     }
 
     function subcategoryShow() {
+        // Находим выбранную категорию для получения подкатегорий
+        const selectedCategory = categories.find(cat => cat.id === productData.category_id);
+        
         return (
             <>
                 <div className={`select ${errors.subcategory ? 'error-select' : ''}`}>
                     <div className="select-placeholder" 
-                        onClick={() => visible('subcategory', !isVisible.subcategory)}>{productData.subcategory}<span></span>
+                        onClick={() => visible('subcategory', !isVisible.subcategory)}>
+                        {productData.subcategoryName}
+                        <span></span>
                     </div>
-                    {isVisible.subcategory &&
+                    {isVisible.subcategory && selectedCategory?.subcategories &&
                         <div className="select-body">
-                            {categories.categories.map((item) => {
-                                if (item.category === productData.category) {
-                                    return item.subcategory.map(item2 => {
-                                        return <div className="select-input" key={item2}
-                                            onClick={() => {
-                                                setProductData({ ...productData, subcategory: item2 }); 
-                                                visible('subcategory', !isVisible.subcategory);
-                                                if (isSubmitted) clearError('subcategory');
-                                            }}
-                                        >{item2}</div>
-                                    })
-                                }
+                            {selectedCategory.subcategories.map(itemSub => {
+                                return <div className="select-input" key={itemSub.id}
+                                    onClick={() => {
+                                        setProductData({
+                                            ...productData,
+                                            subcategory_id: itemSub.id,
+                                            subcategoryName: itemSub.name
+                                        }); 
+                                        visible('subcategory', !isVisible.subcategory);
+                                        if (isSubmitted) clearError('subcategory');
+                                    }}
+                                >{itemSub.name}</div>
                             })}
                         </div>
                     }
@@ -365,25 +420,31 @@ export default function EditProduct() {
                     <div className='product-title'>Категория<span></span></div>
                     <div className={`select ${errors.category ? 'error-select' : ''}`}>
                         <div className="select-placeholder" 
-                            onClick={() => visible('category', !isVisible.category)}>{productData.category}<span></span>
+                            onClick={() => visible('category', !isVisible.category)}>{productData.categoryName}<span></span>
                         </div>
                         {isVisible.category &&
                             <div className="select-body">
-                                {categories.categories.map((item) => {
-                                    return <div className="select-input" key={item.category} 
+                                {categories.map((item) => {
+                                    return <div className="select-input" key={item.id} 
                                         onClick={() => {
-                                            setProductData({ ...productData, category: item.category, subcategory: "Выберите подкатегорию" });
+                                            setProductData({ 
+                                                ...productData, 
+                                                category_id: item.id,
+                                                categoryName: item.name,
+                                                subcategory_id: null,
+                                                subcategoryName: "Выберите подкатегорию"
+                                            });
                                             visible('category', !isVisible.category);
                                             if (isSubmitted) clearError('category');
                                         }}>
-                                        {item.category}
+                                        {item.name}
                                     </div>
                                 })}
                             </div>
                         }
                         {errors.category && <div className="error-message">{errors.category}</div>}
                     </div>
-                    {productData.category !== "Выберите категорию" && subcategoryShow()}
+                    {productData.category_id && subcategoryShow()}
                 </div>
                 <div className="product-item">
                     <div className='product-title'>Состояние товара<span></span></div>

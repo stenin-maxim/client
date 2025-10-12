@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
-import categories from "../assets/categories.json";
+import { useSelector } from 'react-redux';
+import { useGetCategoriesQuery } from '@/api/categoriesApi';
 
 export default function Menu() {
     const [isShow, setIsShow] = useState(false);
     const [activeCategory, setActiveCategory] = useState(null);
+    // Получаем категории из Redux state
+    const { categories, loading: categoriesLoading, error: categoriesError } = useSelector(state => state.categories);
     const toggle = () => setIsShow(!isShow);
+    useGetCategoriesQuery();  // Загружаем категории при монтировании компонента
 
     function showSubcategory(e, categoryIndex) {
         e.preventDefault(); // Предотвращаем переход по ссылке при hover
@@ -16,35 +20,47 @@ export default function Menu() {
         setActiveCategory(null);
     }
 
-    // Функция для создания URL-безопасного slug из названия категории
-    const createSlug = (text) => {
-        return text
-            .toLowerCase()
-            .replace(/[^\w\s-]/g, '') // Убираем специальные символы
-            .replace(/\s+/g, '-') // Заменяем пробелы на дефисы
-            .trim();
-    };
+    // Показываем загрузку если категории еще не загружены
+    if (categoriesLoading && categories.length === 0) {
+        return (
+            <>
+                <button className="btn-category" disabled>
+                    <i className="bi bi-list"></i>
+                    Категории
+                </button>
+            </>
+        );
+    }
 
-    let listCategory = categories.categories.map((item, index) => {
-        const categorySlug = createSlug(item.category);
+    // Показываем ошибку если не удалось загрузить категории
+    if (categoriesError && categories.length === 0) {
+        return (
+            <>
+                <button className="btn-category" disabled>
+                    <i className="bi bi-exclamation-triangle"></i>
+                    Ошибка
+                </button>
+            </>
+        );
+    }
 
+    let listCategory = categories.map((item, index) => {
         return (
             <li 
-                key={item.category}
+                key={item.id}
                 className='menu-category-item' 
                 onMouseEnter={(e) => showSubcategory(e, index)}
                 onMouseLeave={hideSubcategory}
-                style={{backgroundImage: "url(" + item.img + ")"}}
+                style={{backgroundImage: "url(" + item.icon + ")"}}
             >
-                <Link to={`/category/${categorySlug}`}>{item.category}</Link>
+                <Link to={`/category/${item.slug}`}>{item.name}</Link>
                 <ul className={`menu-subcategory ${activeCategory === index ? 'active' : ''}`}>
-                    <h4>{item.category}</h4>
-                    {item.subcategory.map((subItem) => {
-                        const subcategorySlug = createSlug(subItem);
+                    <h4>{item.name}</h4>
+                    {item.subcategories.map((subItem) => {
                         return (
-                            <li key={subItem}>
-                                <Link to={`/category/${categorySlug}/${subcategorySlug}`}>
-                                    {subItem}
+                            <li key={subItem.id}>
+                                <Link to={`/category/${item.slug}/${subItem.slug}`}>
+                                    {subItem.name}
                                 </Link>
                             </li>
                         )

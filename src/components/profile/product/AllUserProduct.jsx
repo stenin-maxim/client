@@ -50,55 +50,59 @@ export default function AllUserProduct() {
 
     return (
         <>
-            {userProductsInactive.length > 0 ? (<h2>Неактивные</h2>) : ''}
-            {userProductsInactive?.map((item) => (
-                <ProductCard
-                    key={item.id}
-                    item={item}
-                    actions={inactiveActions.map(action => ({
-                        ...action,
-                        to: action.type === 'link' ? `/product/${item.id}/edit` : undefined
-                    }))}
-                    onActionClick={handleActionClick}
-                    showInactiveText={true}
-                />
-            ))}
+            {userProducts.length > 0 ? 
+                <>                
+                    {userProductsInactive.length > 0 ? (<h2>Неактивные</h2>) : ''}
+                    {userProductsInactive?.map((item) => (
+                        <ProductCard
+                            key={item.id}
+                            item={item}
+                            actions={inactiveActions.map(action => ({
+                                ...action,
+                                to: action.type === 'link' ? `/product/${item.id}/edit` : undefined
+                            }))}
+                            onActionClick={handleActionClick}
+                            showInactiveText={true}
+                        />
+                    ))}
 
-            {userProductsActive.length > 0 ? (<h2>Активные</h2>) : ''}
-            {userProductsActive?.map((item) => (
-                <ProductCard
-                    key={item.id}
-                    item={item}
-                    actions={activeActions.map(action => ({
-                        ...action,
-                        to: action.type === 'link' ? `/product/${item.id}/edit` : undefined
-                    }))}
-                    onActionClick={handleActionClick}
-                    showExpiresAt={true}
-                />
-            ))}
+                    {userProductsActive.length > 0 ? (<h2>Активные</h2>) : ''}
+                    {userProductsActive?.map((item) => (
+                        <ProductCard
+                            key={item.id}
+                            item={item}
+                            actions={activeActions.map(action => ({
+                                ...action,
+                                to: action.type === 'link' ? `/product/${item.id}/edit` : undefined
+                            }))}
+                            onActionClick={handleActionClick}
+                            showExpiresAt={true}
+                        />
+                    ))}
 
-            <UnpublishModal
-                isOpen={modalIsOpen}
-                onClose={closeModal}
-                product={product}
-                onAction={handleSetStatusProduct}
-                loading={loading}
-            />
+                    <UnpublishModal
+                        isOpen={modalIsOpen}
+                        onClose={closeModal}
+                        product={product}
+                        onAction={handleSetStatusProduct}
+                        loading={loading}
+                    />
 
-            {userProductsActive.length > 0 ? (<h2>Проданные</h2>) : ''}
-            {userProductsSold?.map((item) => (
-                <ProductCard
-                    key={item.id}
-                    item={item}
-                    actions={soldActions.map(action => ({
-                        ...action,
-                        to: action.type === 'link' ? `/product/${item.id}/edit` : undefined
-                    }))}
-                    onActionClick={handleActionClick}
-                    showSoldText={true}
-                />
-            ))}
+                    {userProductsSold.length > 0 ? (<h2>Проданные</h2>) : ''}
+                    {userProductsSold?.map((item) => (
+                        <ProductCard
+                            key={item.id}
+                            item={item}
+                            actions={soldActions.map(action => ({
+                                ...action,
+                                to: action.type === 'link' ? `/product/${item.id}/edit` : undefined
+                            }))}
+                            onActionClick={handleActionClick}
+                            showSoldText={true}
+                        />
+                    ))}
+                </> : <center>Все объявления будут отображаться на этой странице.</center>
+            }
         </>
     );
 }

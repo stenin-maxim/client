@@ -1,18 +1,26 @@
 import { useState } from 'react'
-import categories from "../assets/categories.json";
 import { Link, useNavigate } from 'react-router';
-import { useDispatch } from 'react-redux';
-import { useCreateProductMutation } from '../api/productApi';
-import { addUserProduct } from '../features/userProduct/userProductSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useCreateProductMutation } from '@/api/productApi';
+import { useGetCategoriesQuery } from '@/api/categoriesApi';
+import { addUserProduct } from '@/features/userProduct/userProductSlice';
 
 export default function CreateProduct() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
+    
+    // Получаем категории из Redux state
+    const { categories, loading: categoriesLoading, error: categoriesError } = useSelector(state => state.categories);
+    
+    useGetCategoriesQuery(); // Загружаем категории при монтировании компонента
+
     const [photos, setPhotos] = useState([]);
     const [productData, setProductData] = useState({
-        category: "Выберите категорию",
-        subcategory: "Выберите подкатегорию",
+        category_id: null, // ID категории
+        categoryName: "Выберите категорию", // Название для отображения
+        subcategory_id: null, // ID подкатегории
+        subcategoryName: "Выберите подкатегорию", // Название для отображения
         item_condition: "Не выбрано",
         type_ad: "Не выбрано",
         name: '',
@@ -34,6 +42,32 @@ export default function CreateProduct() {
 
     let selectItemCondition = ['Б/у', 'Новое'];
     let selectTypeAd = ['Продаю свое', 'Приобрел на продажу', 'Магазин'];
+
+    // Показываем загрузку если категории еще не загружены
+    if (categoriesLoading && categories.length === 0) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
+                        <div className="loading">Загрузка категорий...</div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Показываем ошибку если не удалось загрузить категории
+    if (categoriesError && categories.length === 0) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
+                        <div className="error">Ошибка загрузки категорий: {categoriesError}</div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     // Функция валидации формы
     const validateForm = () => {
@@ -225,8 +259,10 @@ export default function CreateProduct() {
             
             // Сбрасываем форму после успешной отправки
             setProductData({
-                category: "Выберите категорию",
-                subcategory: "Выберите подкатегорию",
+                category_id: null,
+                categoryName: "Выберите категорию",
+                subcategory_id: null,
+                subcategoryName: "Выберите подкатегорию",
                 item_condition: "Не выбрано",
                 type_ad: "Не выбрано",
                 name: '',
@@ -240,7 +276,6 @@ export default function CreateProduct() {
             setErrors({});
             
         } catch (error) {
-            console.error('Ошибка создания продукта:', error);
             alert(`Ошибка отправки: ${error.message}`);
         }
         finally {
@@ -249,26 +284,31 @@ export default function CreateProduct() {
     }
 
     function subcategoryShow() {
+        // Находим выбранную категорию для получения подкатегорий
+        const selectedCategory = categories.find(cat => cat.id === productData.category_id);
+
         return (
             <>
                 <div className={`select ${errors.subcategory ? 'error-select' : ''}`}>
                     <div className="select-placeholder" 
-                        onClick={() => visible('subcategory', !isVisible.subcategory)}>{productData.subcategory}<span></span>
+                        onClick={() => visible('subcategory', !isVisible.subcategory)}>
+                        {productData.subcategoryName}
+                        <span></span>
                     </div>
-                    {isVisible.subcategory &&
+                    {isVisible.subcategory && selectedCategory?.subcategories &&
                         <div className="select-body">
-                            {categories.categories.map((item) => {
-                                if (item.category === productData.category) {
-                                    return item.subcategory.map(item2 => {
-                                        return <div className="select-input" key={item2}
-                                            onClick={() => {
-                                                setProductData({ ...productData, subcategory: item2 }); 
-                                                visible('subcategory', !isVisible.subcategory);
-                                                if (isSubmitted) clearError('subcategory');
-                                            }}
-                                        >{item2}</div>
-                                    })
-                                }
+                            {selectedCategory.subcategories.map(itemSub => {
+                                return <div className="select-input" key={itemSub.id}
+                                    onClick={() => {
+                                        setProductData({
+                                            ...productData,
+                                            subcategory_id: itemSub.id,
+                                            subcategoryName: itemSub.name
+                                        }); 
+                                        visible('subcategory', !isVisible.subcategory);
+                                        if (isSubmitted) clearError('subcategory');
+                                    }}
+                                >{itemSub.name}</div>
                             })}
                         </div>
                     }
@@ -285,18 +325,26 @@ export default function CreateProduct() {
                     <div className='product-title'>Категория<span></span></div>
                     <div className={`select ${errors.category ? 'error-select' : ''}`}>
                         <div className="select-placeholder" 
-                            onClick={() => visible('category', !isVisible.category)}>{productData.category}<span></span>
+                            onClick={() => visible('category', !isVisible.category)}>
+                            {productData.categoryName}
+                            <span></span>
                         </div>
                         {isVisible.category &&
                             <div className="select-body">
-                                {categories.categories.map((item) => {
-                                    return <div className="select-input" key={item.category} 
+                                {categories.map((item) => {
+                                    return <div className="select-input" key={item.id} 
                                         onClick={() => {
-                                            setProductData({ ...productData, category: item.category, subcategory: "Выберите подкатегорию" });
+                                            setProductData({
+                                                ...productData,
+                                                category_id: item.id,
+                                                categoryName: item.name,
+                                                subcategory_id: null,
+                                                subcategoryName: "Выберите подкатегорию"
+                                            });
                                             visible('category', !isVisible.category);
                                             if (isSubmitted) clearError('category');
                                         }}>
-                                        {item.category}
+                                        {item.name}
                                     </div>
                                 })}
                             </div>
