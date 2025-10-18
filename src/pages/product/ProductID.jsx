@@ -7,7 +7,7 @@ import { useUnpublishModal } from '@/hooks/useUnpublishModal';
 import { useProductActions } from '@/hooks/useProductActions';
 import { Link } from 'react-router';
 
-export default function Product() {
+export default function ProductID() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { setStatusProduct, deleteProduct, loading } = useProductActions();
@@ -80,11 +80,11 @@ export default function Product() {
                             <li>
                                 <dl>
                                     <dt>Категория</dt>
-                                    <dd>{product?.category}</dd>
+                                    <dd>{product?.category.name}</dd>
                                 </dl>
                                 <dl>
                                     <dt>Подкатегория</dt>
-                                    <dd>{product?.subcategory}</dd>
+                                    <dd>{product?.subcategory.name}</dd>
                                 </dl>
                             </li>
                         </ul>

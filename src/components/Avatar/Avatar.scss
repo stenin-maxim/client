@@ -1,4 +1,4 @@
-@use '../../scss/variables' as *;
+@use '@/scss/variables' as *;
 
 .avatar,
 .avatar-img {
@@ -22,6 +22,7 @@
         height: 42px;
         font-size: 20px;
         margin-left: 20px;
+        cursor: pointer;
     }
     &--sidebar,
     &--settings {
