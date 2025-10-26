@@ -49,6 +49,7 @@ export default function Settings() {
         e.preventDefault();
         if (avatarFile) {
             try {
+                setLoading(true);
                 const data = await uploadAvatar(localStorage.getItem('accessToken'), avatarFile);
                 
                 if (data.avatar) {
@@ -62,6 +63,8 @@ export default function Settings() {
             } catch (error) {
                 console.error('Error uploading avatar:', error);
                 alert('Ошибка при загрузке аватара');
+            } finally {
+                setLoading(false);
             }
         }
     };
@@ -211,7 +214,7 @@ export default function Settings() {
                                 <p>Нажмите или перетащите изображение</p>
                             </div>
                             <p className="buttons">
-                                <input type="submit" value="Сохранить" className="form-submit" />
+                                <input type="submit" value="Сохранить" className="form-submit" disabled={loading} />
                                 {avatar && <input type="button" value="Удалить" className="form-button" onClick={handleAvatarDelete} />}
                                 <input type="button" value="Отмена" className="form-button" onClick={closeModalAvatar} />
                             </p>

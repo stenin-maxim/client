@@ -12,9 +12,9 @@ import Restore from './pages/auth/Restore';
 import Profile from './pages/profile/Profile';
 import Settings from './pages/profile/Settings';
 import NotFound from './pages/NotFound';
-import Product from './pages/Product';
-import CreateProduct from './pages/CreateProduct';
-import EditProduct from './pages/EditProduct';
+import ProductULID from './pages/product/ProductULID';
+import CreateProduct from './pages/product/CreateProduct';
+import EditProduct from './pages/product/EditProduct';
 import Favorites from './pages/profile/Favorites';
 import Messages from './pages/profile/Messages';
 import Support from './pages/profile/Support';
@@ -25,6 +25,7 @@ import SoldProduct from './components/profile/product/SoldProduct';
 import AdsFavorites from './components/profile/AdsFavorites';
 import SellersFavorites from './components/profile/SellersFavorites';
 import VerifyEmail from './pages/VerifyEmail';
+import BreadcrumbsLayout from './layout/BreadcrumbsLayout';
 
 export default function App() {
     const router = createBrowserRouter(
@@ -42,21 +43,23 @@ export default function App() {
                 <Route element={<RequireAuth />}>
                     <Route path="product" element={<CreateProduct/>} />
                     <Route path="product/:id/edit" element={<EditProduct />}/>
-                    <Route path="product/:id" element={<Product />}/>
-                    <Route element={<ProfileLayout />}>
-                        <Route path="profile" element={<Profile />}>
-                            <Route index element={<AllUserProduct />} />
-                            <Route path="inactive" element={<InactiveProduct />} />
-                            <Route path="active" element={<ActiveProduct />} />
-                            <Route path="sold" element={<SoldProduct />} />
+                    <Route element={<BreadcrumbsLayout />}>                    
+                        <Route path="/:category/:subcategory/:ulid" element={<ProductULID />}/>
+                        <Route element={<ProfileLayout />}>
+                            <Route path="profile" element={<Profile />}>
+                                <Route index element={<AllUserProduct />} />
+                                <Route path="inactive" element={<InactiveProduct />} />
+                                <Route path="active" element={<ActiveProduct />} />
+                                <Route path="sold" element={<SoldProduct />} />
+                            </Route>
+                            <Route path="favorites" element={<Favorites />}>
+                                <Route index element={<AdsFavorites />} />
+                                <Route path="sellers" element={<SellersFavorites />} />
+                            </Route>
+                            <Route path="settings" element={<Settings />} />
+                            <Route path="messages" element={<Messages />} />
+                            <Route path="support" element={<Support />} />
                         </Route>
-                        <Route path="favorites" element={<Favorites />}>
-                            <Route index element={<AdsFavorites />} />
-                            <Route path="sellers" element={<SellersFavorites />} />
-                        </Route>
-                        <Route path="settings" element={<Settings />} />
-                        <Route path="messages" element={<Messages />} />
-                        <Route path="support" element={<Support />} />
                     </Route>
                 </Route>
             </Route>
