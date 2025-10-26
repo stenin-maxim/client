@@ -7,17 +7,19 @@ import { useUnpublishModal } from '@/hooks/useUnpublishModal';
 import { useProductActions } from '@/hooks/useProductActions';
 import { Link } from 'react-router';
 
-export default function ProductID() {
-    const { id } = useParams();
+export default function ProductULID() {
+    const { ulid } = useParams();
     const navigate = useNavigate();
     const { setStatusProduct, deleteProduct, loading } = useProductActions();
     const { modalIsOpen, openModal, closeModal } = useUnpublishModal();
-    const productFromState = useSelector(state => state.userProduct.userProducts || []).find(p => String(p.id) === String(id));
-    const { data: apiResp, isFetching, isError } = useGetProductByIdQuery(id, {
+    const productFromState = useSelector(state => state.userProduct.userProducts || []).find(p => String(p.ulid) === String(ulid));
+    const { data: apiResp, isFetching, isError } = useGetProductByIdQuery(ulid, {
         skip: !!productFromState
     });
     const apiProduct = apiResp?.data || apiResp || null;
     const product = productFromState || apiProduct;
+
+    //console.log(id);
 
     const handleSetStatusProduct = async (productId, status) => {
         try {
