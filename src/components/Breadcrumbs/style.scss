@@ -1,0 +1,20 @@
+@use '@/scss/variables' as *;
+
+.breadcrumb {
+    margin-bottom: 20px;
+    font-size: 13px;
+    &-item {
+        display: inline;
+        a {
+            color: $blue;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: '>';
+    padding: 0 8px;
+}
