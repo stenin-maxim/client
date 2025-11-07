@@ -32,6 +32,9 @@ export const productApi = createApi({
             providesTags: ['Product'], // Помечаем данные тегом для инвалидации
             keepUnusedDataFor: 300, // кэш 5 минут
             refetchOnMountOrArgChange: false, // не перезапрашивать без надобности
+            // Не блокировать UI при загрузке - показывать кэшированные данные, если они есть
+            refetchOnFocus: false,
+            refetchOnReconnect: true,
         }),
         createProduct: builder.mutation({
             query: (formData) => ({

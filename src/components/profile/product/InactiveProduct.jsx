@@ -3,10 +3,10 @@ import ProductCard from './ProductCard';
 import { useProductActions } from '../../../hooks/useProductActions';
 
 export default function InactiveProduct() {
-    const userProducts = useSelector(state => state.userProduct.userProducts);
+    const userProducts = useSelector(state => state.userProduct.userProducts) || [];
     const { setStatusProduct, deleteProduct, loading, isStatusProduct, isDelete } = useProductActions();
 
-    const userProductsNoActive = userProducts?.filter((item) => item.status === 'inactive');
+    const userProductsNoActive = userProducts.filter((item) => item.status === 'inactive');
 
     const handleActionClick = async (action, item) => {
         if (action.label === 'Опубликовать повторно') {

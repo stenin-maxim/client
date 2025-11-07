@@ -18,9 +18,6 @@ export default function ProductULID() {
     });
     const apiProduct = apiResp?.data || apiResp || null;
     const product = productFromState || apiProduct;
-
-    //console.log(id);
-
     const handleSetStatusProduct = async (productId, status) => {
         try {
             await setStatusProduct(productId, status);
