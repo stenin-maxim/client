@@ -1,30 +1,16 @@
-import { useState, useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { Link } from 'react-router'
 import { useSelector } from 'react-redux'
 import { useGetCategoriesQuery } from '@/api/categoriesApi'
+import { useGetProductsQuery } from '@/api/productApi'
 
 export default function Home() {
-    const [ads, setAds] = useState([]);
-    const [error, setError] = useState(null);
     const categoriesScrollRef = useRef(null);
-
-    // Получаем категории из Redux state
     const { categories, loading: categoriesLoading, error: categoriesError } = useSelector(state => state.categories);
+    const { products: products, loading: productsLoading, error: productsError } = useSelector(state => state.product);
     
     useGetCategoriesQuery(); // Загружаем категории при монтировании компонента
-
-    useEffect(() => {
-        fetch(import.meta.env.VITE_API_URL + "public/ads")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setAds(result);
-                },
-                (error) => {
-                    setError(error);
-                }
-            )
-    }, [])
+    useGetProductsQuery();
 
     // Функции для прокрутки категорий
     const scrollCategoriesLeft = () => {
@@ -38,6 +24,8 @@ export default function Home() {
             categoriesScrollRef.current.scrollBy({ left: 600, behavior: 'smooth' });
         }
     };
+
+    console.log(products);
 
     return (
         <>
@@ -77,33 +65,29 @@ export default function Home() {
                     </div>
                 </div>
                 <div className="row">
-                    <h2 className="mb-3">Отдам даром</h2>
-                    <div className="col-10">
-                        <div className="row">
-                            <div className="col-3">
-                                <div className="block-ad">
-                                    <a href="">
-                                        <span className="location">Москва</span>
-                                        <i className="bi bi-heart" title="Добавить в избранное"></i>
-                                        <div className="free">Бесплатно</div>
-                                        <div className="title">Собака</div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <h2 className="mb-3">Все обьявления</h2>
                     <div className="col-10">
                         <div className="row">
-                            {ads.map((item) => (
-                                <div key={item.id} className="col-3">
-                                    <div className="block-ad">
-                                        <a href={"/ad/" + item.id} >
-                                            <img src={item.adPhotos.length === 0 ? "#" : import.meta.env.VITE_API_PUBLIC_URL + "image/" + item.adPhotos[0].id} alt=""/>
-                                            <span className="location">{item.location}</span>
+                            {productsLoading && <div>Загрузка...</div>}
+                            {productsError && <div>Ошибка: {productsError}</div>}
+                            {products && products.map((item) => (
+                                <div key={item.id} className="col-3" style={{ display: 'flex', marginBottom: '20px' }}>
+                                    <div className="block-product">
+                                        <a href={`/${item.category.slug}/${item.subcategory.slug}/${item.ulid}`} >
+                                            <div className="image-wrapper">
+                                                <img 
+                                                    src={item.product_image?.[0]?.url} 
+                                                    alt={item.name}
+                                                    onError={(e) => {
+                                                        e.target.src = '#';
+                                                    }}
+                                                />
+                                                <span className="location">{item.location}</span>
+                                                <i className="bi bi-heart" title="Добавить в избранное"></i>
+                                            </div>
                                             <i className="bi bi-heart" title="Добавить в избранное"></i>
                                             <div className="price">{item.price}</div>
-                                            <div className="title">{item.title}</div>
+                                            <div className="title">{item.name}</div>
                                         </a>
                                     </div>
                                 </div>
