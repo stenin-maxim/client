@@ -2,7 +2,9 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '@/features/auth/authSlice';
 import userProductReducer from '@/features/userProduct/userProductSlice';
 import categoriesReducer from '@/features/categories/categoriesSlice';
+import productReducer from '@/features/productSlice'; 
 import { productApi } from '@/api/productApi';
+import { userProductApi } from '@/api/userProductApi';
 import { categoriesApi } from '@/api/categoriesApi';
 
 export const store = configureStore({
@@ -10,7 +12,9 @@ export const store = configureStore({
         auth: authReducer,
         userProduct: userProductReducer,
         categories: categoriesReducer,
-        [productApi.reducerPath]: productApi.reducer, // Добавляем редьюсер RTK Query
+        product: productReducer,
+        [productApi.reducerPath]: productApi.reducer,
+        [userProductApi.reducerPath]: userProductApi.reducer, // Добавляем редьюсер RTK Query
         [categoriesApi.reducerPath]: categoriesApi.reducer,
         // другие редьюсеры
     },
@@ -18,6 +22,7 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) => 
         getDefaultMiddleware().concat(
             productApi.middleware,
+            userProductApi.middleware,
             categoriesApi.middleware
         ),
 });
