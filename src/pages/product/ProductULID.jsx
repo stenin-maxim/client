@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router';
-import { useGetProductByIdQuery } from '@/api/productApi';
+import { useGetProductByIdQuery } from '@/api/userProductApi';
 import ImageGallery from '@/components/ImageGallery';
 import UnpublishModal from '@/components/modal/UnpublishModal';
 import { useUnpublishModal } from '@/hooks/useUnpublishModal';

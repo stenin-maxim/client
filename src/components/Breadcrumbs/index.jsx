@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router';
-import { useGetProductByIdQuery } from '@/api/productApi';
+import { useGetProductByIdQuery } from '@/api/userProductApi';
 import "./style.scss";
 
 export default function Breadcrumbs() {

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserProductAll, updateUserProduct } from '@/features/userProduct/userProductSlice';
-import { useGetUserProductAllQuery, useUpdateProductMutation } from '@/api/productApi';
+import { useGetUserProductAllQuery, useUpdateProductMutation } from '@/api/userProductApi';
 import { useGetCategoriesQuery } from '@/api/categoriesApi';
 
 

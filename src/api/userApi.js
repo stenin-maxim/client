@@ -63,7 +63,6 @@ export async function updatePhone(token, phone) {
 }
 
 export async function updateCity(token, city) {
-    console.log(city);
     const response = await fetch(`${API_URL}profile/city`, {
         method: 'PATCH',
         headers: {

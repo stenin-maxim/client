@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useStatusProductMutation, useDeleteUserProductMutation } from '../api/productApi';
+import { useStatusProductMutation, useDeleteUserProductMutation } from '../api/userProductApi';
 import { updateUserProductValue, removeUserProduct } from '../features/userProduct/userProductSlice';
 
 export const useProductActions = () => {

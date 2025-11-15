@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { useCreateProductMutation } from '@/api/productApi';
+import { useCreateProductMutation } from '@/api/userProductApi';
 import { useGetCategoriesQuery } from '@/api/categoriesApi';
 import { addUserProduct } from '@/features/userProduct/userProductSlice';
 

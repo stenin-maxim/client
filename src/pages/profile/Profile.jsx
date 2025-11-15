@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { NavLink, Outlet } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { useGetUserProductAllQuery } from '../../api/productApi';
+import { useGetUserProductAllQuery } from '../../api/userProductApi';
 import { setUserProductAll } from '../../features/userProduct/userProductSlice';
 
 export default function Profile() {
