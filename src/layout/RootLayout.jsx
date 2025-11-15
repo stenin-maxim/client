@@ -19,6 +19,7 @@ export default function RootLayout() {
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const baseUrl = import.meta.env.VITE_API_URL;
+    const APP_NAME = import.meta.env.VITE_APP_NAME;
 
     async function handleLogout() {
         try {
@@ -164,7 +165,19 @@ export default function RootLayout() {
                 </div>
             </main>
             <footer>
-                FOOTER
+                <div className="container">
+                    <div className="row">
+                        <div className="col-4">
+                            <span>Лицензионное соглашение</span>
+                        </div>
+                        <div className="col-4">
+                            <span>Помощь</span>
+                        </div>
+                        <div className="col-4">
+                            <span>Реклама на {APP_NAME}</span>
+                        </div>
+                    </div>
+                </div>
             </footer>
         </>
     )
