@@ -51,14 +51,75 @@
             border-radius: 10px;
             width: 700px;
             position: relative;
-            .city {
-                cursor: pointer;
-                &:hover {
-                    text-decoration: underline;
+            h2 {
+                margin: 10px 0 20px;
+            }
+            form {
+                position: relative;
+                display: flex;
+                align-items: center;
+            }
+            .bi-search {
+                position: absolute;
+                top: 10px;
+                left: 8px;
+                font-size: 16px;
+                color: $gray-1;
+            }
+            .location-input {
+                padding: 10px 30px 10px 30px;
+                border-radius: 5px;
+                border: 1px solid $gray-2;
+                width: 350px;
+                font-size: 15px;
+                &:focus-visible {
+                    border: 1px solid $blue;
                 }
             }
-            .all-city {
-                margin-top: 15px;
+            .location-submit {
+                padding: 8px 60px;
+                margin-left: 20px;
+                background: $pink;
+                color: $white;
+                border: 1px solid $pink;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 17px;
+            }
+            .btn-clear {
+                position: absolute;
+                left: 380px;
+                top: 4px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 22px;
+                color: $gray-1;
+            }
+            .filter-city {
+                position: absolute;
+                top: 45px;
+                z-index: 10;
+                background: white;
+                width: 410px;
+                border-radius: 5px;
+                overflow: scroll;
+                max-height: 300px;
+            }
+            ul li {
+                padding: 7px 20px;
+                    cursor: pointer;
+                    &:hover {
+                        background: $gray-3;
+                }
+            }
+            .info {
+                font-size: 13px;
+                margin: 15px 0 30px;
+            }
+            .btn-cancel {
+                width: 100%;
+                margin-top: 40px;
             }
         }
 
