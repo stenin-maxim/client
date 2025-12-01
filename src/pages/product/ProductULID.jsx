@@ -67,7 +67,7 @@ export default function ProductULID() {
                             <li>
                                 <dl>
                                     <dt>Местоположение</dt>
-                                    <dd>{product?.location}</dd>
+                                    <dd>{product?.location.city}</dd>
                                 </dl>
                             </li>
                             <li>
