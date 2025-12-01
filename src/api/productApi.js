@@ -11,10 +11,13 @@ export const productApi = createApi({
     tagTypes: ['Products'], // Теги для кэширования
     endpoints: (builder) => ({
         getProducts: builder.query({
-            query: () => ({
-                url: '/products',
-                method: "GET",
-            }), // Определяет конечную точку GET запроса
+            query: (citySlug = null) => {
+                const url = citySlug ? `/${citySlug}` : '';
+                return {
+                    url: url,
+                    method: "GET",
+                }
+            }, // Определяет конечную точку GET запроса
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
                     dispatch(setProductsLoading(true));
