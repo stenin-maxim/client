@@ -88,9 +88,11 @@ export default function LocationModal() {
             setSaving(true);
 
             dispatch(setUserCity(selectedCity));
-
+            
             setModalIsOpen(false); // Закрываем модалку
-            navigate(`/${citySlug}`);
+            
+            // Используем replace: true чтобы избежать дублирования в истории
+            navigate(`/${citySlug}`, { replace: true });
         } catch (error) {
             console.error(error);
             alert('Не удалось сохранить город. Попробуйте ещё раз.');

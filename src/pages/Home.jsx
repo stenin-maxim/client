@@ -9,18 +9,26 @@ export default function Home() {
     const { categories } = useSelector(state => state.categories);
     const { products: products, loading: productsLoading, error: productsError } = useSelector(state => state.product);
     const { cityUser } = useSelector(state => state.location);
-    const { citySlug } = useParams();
+    const { city, category, subcategory } = useParams();
     const navigate = useNavigate();
 
     // Редирект, если cityUser установлен, но в URL нет city
     useEffect(() => {
-        if (cityUser?.slug && !citySlug) {
+        if (cityUser?.slug && !city) {
             navigate(`/${cityUser.slug}`, { replace: true });
         }
-    }, [cityUser, citySlug, navigate]);
+    }, [cityUser, city, navigate]);
 
     useGetCategoriesQuery(); // Загружаем категории при монтировании компонента
-    useGetProductsQuery(citySlug || null);
+    
+    useGetProductsQuery({
+        city: city || null,
+        category: category || null,
+        subcategory: subcategory || null,
+    }, {
+        // Принудительно обновляем при изменении параметров
+        refetchOnMountOrArgChange: true,
+    });
 
     // Функции для прокрутки категорий
     const scrollCategoriesLeft = () => {
@@ -52,7 +60,7 @@ export default function Home() {
                             {categories.map((item) => {
                                 return (
                                     <div key={item.id} className="home-category-item">
-                                        <Link to={`/category/${item.slug}`}>
+                                        <Link to={`/${cityUser.slug}/${item.slug}`}>
                                             <img className="img-category"
                                                 src={item.img}
                                                 alt={item.name}

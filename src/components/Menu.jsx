@@ -8,6 +8,7 @@ export default function Menu() {
     const [activeCategory, setActiveCategory] = useState(null);
     // Получаем категории из Redux state
     const { categories, loading: categoriesLoading, error: categoriesError } = useSelector(state => state.categories);
+    const { cityUser } = useSelector(state => state.location)
     const toggle = () => setIsShow(!isShow);
     useGetCategoriesQuery();  // Загружаем категории при монтировании компонента
 
@@ -53,13 +54,13 @@ export default function Menu() {
                 onMouseLeave={hideSubcategory}
                 style={{backgroundImage: "url(" + item.icon + ")"}}
             >
-                <Link to={`/category/${item.slug}`}>{item.name}</Link>
+                <Link to={`/${cityUser.slug}/${item.slug}`}>{item.name}</Link>
                 <ul className={`menu-subcategory ${activeCategory === index ? 'active' : ''}`}>
                     <h4>{item.name}</h4>
                     {item.subcategories.map((subItem) => {
                         return (
                             <li key={subItem.id}>
-                                <Link to={`/category/${item.slug}/${subItem.slug}`}>
+                                <Link to={`/${cityUser.slug}/${item.slug}/${subItem.slug}`}>
                                     {subItem.name}
                                 </Link>
                             </li>

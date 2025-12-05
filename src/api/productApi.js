@@ -11,13 +11,26 @@ export const productApi = createApi({
     tagTypes: ['Products'], // Теги для кэширования
     endpoints: (builder) => ({
         getProducts: builder.query({
-            query: (citySlug = null) => {
-                const url = citySlug ? `/${citySlug}` : '';
+            query: ({city, category, subcategory} = {}) => {
+                let url = '';
+
+                if (city) {
+                    url = `/${city}`;
+                    if (category) {
+                        url += `/${category}`;
+                        if (subcategory) {
+                            url += `/${subcategory}`;
+                        }
+                    }
+                }
+                
                 return {
                     url: url,
                     method: "GET",
                 }
-            }, // Определяет конечную точку GET запроса
+            },
+            // Отключаем кэширование для разных параметров
+            keepUnusedDataFor: 0,
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
                     dispatch(setProductsLoading(true));
