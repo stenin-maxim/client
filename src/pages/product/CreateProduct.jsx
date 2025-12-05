@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useCreateProductMutation } from '@/api/userProductApi';
 import { useGetCategoriesQuery } from '@/api/categoriesApi';
+import { useGetLocationQuery } from '@/api/locationApi';
 import { addUserProduct } from '@/features/userProduct/userProductSlice';
 
 export default function CreateProduct() {
@@ -12,11 +13,15 @@ export default function CreateProduct() {
     
     // Получаем категории из Redux state
     const { categories, loading: categoriesLoading, error: categoriesError } = useSelector(state => state.categories);
-    
+    const { location: locations } = useSelector(state => state.location); // Получаем локации из Redux state
+
     useGetCategoriesQuery(); // Загружаем категории при монтировании компонента
+    useGetLocationQuery(); // Загружаем локации при монтировании компонента
 
     const [photos, setPhotos] = useState([]);
     const [productData, setProductData] = useState({
+        location_id: null,
+        location: '', // Название города для отображения
         category_id: null, // ID категории
         categoryName: "Выберите категорию", // Название для отображения
         subcategory_id: null, // ID подкатегории
@@ -27,9 +32,14 @@ export default function CreateProduct() {
         price: 0,
         amount: 1,
         desc: '',
-        location: '',
         autopublish: false
     });
+
+    // Состояние для поиска городов
+    const [locationInput, setLocationInput] = useState('');
+    const [showLocationList, setShowLocationList] = useState(false);
+    const [filteredLocations, setFilteredLocations] = useState([]);
+
     const [isVisible, setIsVisible] = useState({
         category: false,
         subcategory: false,
@@ -68,6 +78,67 @@ export default function CreateProduct() {
             </div>
         );
     }
+
+    // Обработка изменения поля локации
+    const handleLocationChange = (event) => {
+        const value = event.target.value.trimStart();
+        setLocationInput(value);
+        
+        // Очищаем ошибку при вводе
+        if (isSubmitted) {
+            clearError('location');
+        }
+        
+        if (value.length >= 2 && locations.length) {
+            const result = locations.filter(item =>
+                item.city.toLowerCase().startsWith(value.toLowerCase())
+            );
+            setFilteredLocations(result);
+            setShowLocationList(true);
+        } else {
+            setFilteredLocations([]);
+            setShowLocationList(false);
+        }
+        
+        // Если пользователь начал вводить новый текст, сбрасываем выбранную локацию
+        if (value !== productData.location) {
+            setProductData(prev => ({
+                ...prev,
+                location_id: null,
+                location: value
+            }));
+        }
+    };
+
+    // Выбор локации из списка
+    const handleLocationSelect = (locationItem) => {
+        setProductData(prev => ({
+            ...prev,
+            location_id: locationItem.id,
+            location: locationItem.city
+        }));
+        setLocationInput(locationItem.city);
+        setShowLocationList(false);
+        setFilteredLocations([]);
+        
+        // Очищаем ошибку при выборе
+        if (isSubmitted) {
+            clearError('location');
+        }
+    };
+
+    // Очистка поля локации
+    const handleLocationClear = (e) => {
+        e.preventDefault();
+        setLocationInput('');
+        setProductData(prev => ({
+            ...prev,
+            location_id: null,
+            location: ''
+        }));
+        setFilteredLocations([]);
+        setShowLocationList(false);
+    };
 
     // Функция валидации формы
     const validateForm = () => {
@@ -120,12 +191,8 @@ export default function CreateProduct() {
         }
 
         // Валидация местоположения
-        if (!productData.location.trim()) {
-            newErrors.location = "Введите местоположение";
-        } else if (productData.location.trim().length < 2) {
-            newErrors.location = "Местоположение должно содержать минимум 2 символа";
-        } else if (productData.location.trim().length > 50) {
-            newErrors.location = "Местоположение не должно превышать 50 символов";
+        if (!productData.location_id) {
+            newErrors.location = "Выберите местоположение из списка";
         }
 
         // Валидация фотографий
@@ -239,12 +306,21 @@ export default function CreateProduct() {
 
         // Добавляем остальные данные формы
         Object.keys(productData).forEach(key => {
+            if (key === 'location') {
+                // Не отправляем location (название), отправляем только location_id
+                return;
+            }
             if (key !== 'autopublish') {
                 formData.append(key, productData[key]);
             } else {
                 formData.append(key, productData[key] ? 'true' : 'false');
             }
         });
+        
+        // Явно добавляем location_id
+        if (productData.location_id) {
+            formData.append('location_id', productData.location_id);
+        }
 
         try {
             const result = await createProduct(formData).unwrap();
@@ -259,6 +335,8 @@ export default function CreateProduct() {
             
             // Сбрасываем форму после успешной отправки
             setProductData({
+                location_id: null,
+                location: '',
                 category_id: null,
                 categoryName: "Выберите категорию",
                 subcategory_id: null,
@@ -269,9 +347,9 @@ export default function CreateProduct() {
                 price: 0,
                 amount: 1,
                 desc: '',
-                location: '',
                 autopublish: false
             });
+            setLocationInput('');
             setPhotos([]);
             setErrors({});
             
@@ -497,14 +575,80 @@ export default function CreateProduct() {
                 </div>
                 <div className='product-item'>
                     <div className="product-title">Местоположение<span></span></div>
-                    <input className={`product-input ${errors.location ? 'error-input' : ''}`}
-                        type="text"
-                        name="location"
-                        value={productData.location}
-                        onChange={handleChange}
-                        maxLength={30}
-                        id="location"
-                    />
+                    <div style={{ position: 'relative' }}>
+                        <input 
+                            className={`product-input ${errors.location ? 'error-input' : ''}`}
+                            type="text"
+                            name="location"
+                            value={locationInput}
+                            onChange={handleLocationChange}
+                            onFocus={() => {
+                                if (locationInput.length >= 2 && filteredLocations.length > 0) {
+                                    setShowLocationList(true);
+                                }
+                            }}
+                            onBlur={() => {
+                                // Закрываем список с небольшой задержкой, чтобы успел сработать onClick
+                                setTimeout(() => setShowLocationList(false), 200);
+                            }}
+                            placeholder="Введите город"
+                            maxLength={50}
+                            id="location"
+                            autoComplete="off"
+                        />
+                        {locationInput && (
+                            <button 
+                                type="button"
+                                onClick={handleLocationClear}
+                                style={{
+                                    position: 'absolute',
+                                    right: '10px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    background: 'none',
+                                    border: 'none',
+                                    fontSize: '20px',
+                                    cursor: 'pointer',
+                                    color: '#999'
+                                }}
+                            >
+                                &times;
+                            </button>
+                        )}
+                        {showLocationList && filteredLocations.length > 0 && (
+                            <ul style={{
+                                position: 'absolute',
+                                top: '100%',
+                                left: 0,
+                                right: 0,
+                                background: 'white',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                maxHeight: '200px',
+                                overflowY: 'auto',
+                                zIndex: 1000,
+                                marginTop: '4px',
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                            }}>
+                                {filteredLocations.map((item) => (
+                                    <li
+                                        key={item.id}
+                                        onClick={() => handleLocationSelect(item)}
+                                        style={{
+                                            padding: '10px 15px',
+                                            cursor: 'pointer',
+                                            borderBottom: '1px solid #eee',
+                                            listStyle: 'none'
+                                        }}
+                                        onMouseEnter={(e) => e.target.style.background = '#f5f5f5'}
+                                        onMouseLeave={(e) => e.target.style.background = 'white'}
+                                    >
+                                        {item.city} {item.region ? `(${item.region})` : ''}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
                     {errors.location && <div className="error-message">{errors.location}</div>}
                 </div>
                 <div className='product-item'>
