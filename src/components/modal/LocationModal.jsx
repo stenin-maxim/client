@@ -16,6 +16,20 @@ export default function LocationModal() {
     const [showCities, setShowCities] = useState(false);
     const [filteredCities, setFilteredCities] = useState([]);
     const [saving, setSaving] = useState(false);
+    const popularCityNames = [
+        'Москва','Санкт-Петербург','Екатеринбург','Новосибирск','Краснодар','Красноярск',
+        'Челябинск','Тюмень','Уфа','Ростов-на-Дону','Казань','Пермь','Самара',
+        'Нижний Новгород','Хабаровск','Омск','Саратов','Томск','Воронеж','Волгоград',
+        'Калининград','Иркутск','Сочи','Архангельск','Ярославль','Владивосток','Оренбург',
+        'Тольятти','Калуга','Астрахань',
+    ];
+    const popularCities = location.filter(item => popularCityNames.includes(item.city));
+    const chunkedPopular = [
+        popularCities.slice(0, 10),
+        popularCities.slice(10, 20),
+        popularCities.slice(20, 30),
+    ];
+
     let openModal = () => { setModalIsOpen(true); };
     let closeModal = () => { setModalIsOpen(false); };
     
@@ -129,33 +143,20 @@ export default function LocationModal() {
                         </form>
                         <p className="info">Введите город в поиске или выберите город из списка популярных</p>
                         <div className="row">
-                            {/* <div className="col-4">
-                                <ul>
-                                    {cities.slice(0, 10).map((item) => (
-                                        <li key={item} onClick={() => handleCitySelect(item)}>
-                                            {item}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className="col-4">
-                                <ul>
-                                    {cities.slice(10, 20).map((item) => (
-                                        <li key={item} onClick={() => handleCitySelect(item)}>
-                                            {item}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className="col-4">
-                                <ul>
-                                    {cities.slice(20, 30).map((item) => (
-                                        <li key={item} onClick={() => handleCitySelect(item)}>
-                                            {item}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div> */}
+                            {chunkedPopular.map((chunk, colIdx) => (
+                                <div key={colIdx} className="col-4">
+                                    <ul>
+                                        {chunk.map((item) => (
+                                            <li
+                                                key={item.slug}
+                                                onClick={() => handleCitySelect(item.city, item.slug)}
+                                            >
+                                                {item.city}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
                         </div>
                         <div><button className="btn btn-cancel" onClick={closeModal}>Отмена</button></div>
                     </div>
