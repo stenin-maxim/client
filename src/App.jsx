@@ -39,29 +39,34 @@ export default function App() {
                 <Route path="restore" element={<Restore/>} />
                 <Route path="/verify-email/:id/:hash" element={<VerifyEmail />} />
 
-                {/* protected routes */}
-                <Route element={<RequireAuth />}>
-                    <Route path="product" element={<CreateProduct/>} />
-                    <Route path="product/:id/edit" element={<EditProduct />}/>
-                    <Route element={<BreadcrumbsLayout />}>                    
-                        <Route path="/:category/:subcategory/:ulid" element={<ProductULID />}/>
-                        <Route element={<ProfileLayout />}>
-                            <Route path="profile" element={<Profile />}>
-                                <Route index element={<AllUserProduct />} />
-                                <Route path="inactive" element={<InactiveProduct />} />
-                                <Route path="active" element={<ActiveProduct />} />
-                                <Route path="sold" element={<SoldProduct />} />
+                <Route path="/:city" element={<Home />}/>
+                <Route element={<BreadcrumbsLayout />}>
+                    <Route path="/:city/:category" element={<Home />}/>
+                    <Route path="/:city/:category/:subcategory" element={<Home />}/>
+                    <Route path="/:city/:category/:subcategory/:ulid" element={<ProductULID />}/>
+                </Route>
+                    {/* protected routes */}
+                    <Route element={<RequireAuth />}>
+                        <Route path="product" element={<CreateProduct/>} />
+                        <Route path="product/:id/edit" element={<EditProduct />}/>
+                        <Route element={<BreadcrumbsLayout />}>
+                            <Route element={<ProfileLayout />}>
+                                <Route path="profile" element={<Profile />}>
+                                    <Route index element={<AllUserProduct />} />
+                                    <Route path="inactive" element={<InactiveProduct />} />
+                                    <Route path="active" element={<ActiveProduct />} />
+                                    <Route path="sold" element={<SoldProduct />} />
+                                </Route>
+                                <Route path="favorites" element={<Favorites />}>
+                                    <Route index element={<AdsFavorites />} />
+                                    <Route path="sellers" element={<SellersFavorites />} />
+                                </Route>
+                                <Route path="settings" element={<Settings />} />
+                                <Route path="messages" element={<Messages />} />
+                                <Route path="support" element={<Support />} />
                             </Route>
-                            <Route path="favorites" element={<Favorites />}>
-                                <Route index element={<AdsFavorites />} />
-                                <Route path="sellers" element={<SellersFavorites />} />
-                            </Route>
-                            <Route path="settings" element={<Settings />} />
-                            <Route path="messages" element={<Messages />} />
-                            <Route path="support" element={<Support />} />
                         </Route>
                     </Route>
-                </Route>
             </Route>
         )
     );
