@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router';
-import { useGetProductByIdQuery } from '@/api/userProductApi';
+import { useGetProductByUlidQuery } from '@/api/productApi';
 import ImageGallery from '@/components/ImageGallery';
 import UnpublishModal from '@/components/modal/UnpublishModal';
 import { useUnpublishModal } from '@/hooks/useUnpublishModal';
@@ -13,8 +13,9 @@ export default function ProductULID() {
     const { setStatusProduct, deleteProduct, loading } = useProductActions();
     const { modalIsOpen, openModal, closeModal } = useUnpublishModal();
     const productFromState = useSelector(state => state.userProduct.userProducts || []).find(p => String(p.ulid) === String(ulid));
-    const { data: apiResp, isFetching, isError } = useGetProductByIdQuery(ulid, {
-        skip: !!productFromState
+    const currentUser = useSelector(state => state.auth.user); // Получить текущего авторизованного пользователя
+    const { data: apiResp, isFetching, isError } = useGetProductByUlidQuery({ulid}, {
+        skip: !!productFromState // Получить данные из кэша, если возможно, иначе сделать запрос к API
     });
     const apiProduct = apiResp?.data || apiResp || null;
     const product = productFromState || apiProduct;
@@ -37,6 +38,8 @@ export default function ProductULID() {
         navigate('/profile');
     }
 
+    const isOwner = currentUser && product && currentUser.id === product.user_id;
+
     if (!product && isFetching) return <>Загрузка...</>;
     if (!product && isError) return <>Ошибка загрузки</>;
 
@@ -47,16 +50,18 @@ export default function ProductULID() {
                     <div className="col-9">
                         <div className="product-user__header">
                             <h2>{product?.name}</h2>
-                            <div>
-                                {(product?.status === 'inactive' || product?.status === 'sold') && (
-                                    <>
-                                        <button onClick={() => handleDeleteProduct(product?.id)}>Удалить объявление</button>
-                                    </>
-                                )}
-                                {(product?.status === 'inactive' || product?.status === 'active') && (
-                                    <Link to={`/product/${product?.id}/edit`}>Редактировать</Link>
-                                )}
-                            </div>
+                            {isOwner && (
+                                <div>
+                                    {(product?.status === 'inactive' || product?.status === 'sold') && (
+                                        <>
+                                            <button onClick={() => handleDeleteProduct(product?.id)}>Удалить объявление</button>
+                                        </>
+                                    )}
+                                    {(product?.status === 'inactive' || product?.status === 'active') && (
+                                        <Link to={`/product/${product?.id}/edit`}>Редактировать</Link>
+                                    )}
+                                </div>
+                            )}
                         </div>
                         <div className="badge">
                             {(product?.status === 'inactive') && (<div className="inactive-text" >Приостановлено</div>)}
@@ -85,6 +90,10 @@ export default function ProductULID() {
                                     <dt>Подкатегория</dt>
                                     <dd>{product?.subcategory.name}</dd>
                                 </dl>
+                                <dl>
+                                    <dt>Состояние товара</dt>
+                                    <dd>{product?.item_condition}</dd>
+                                </dl>
                             </li>
                         </ul>
                     </div>
@@ -92,42 +101,49 @@ export default function ProductULID() {
                         <div className='product-user__header'>
                             <h2 className='price'>{product?.price.toLocaleString('ru-RU')}</h2>
                         </div>
-                        <table>
-                            {(product?.status === 'inactive' || product?.status === 'active') && (
-                                <tbody>
-                                    <tr>
-                                        <th>В избранном</th>
-                                        <td>0</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Просмотры</th>
-                                        <td>0</td>
-                                    </tr>
+                        {isOwner && (
+                            <table>
+
+                                {(product?.status === 'inactive' || product?.status === 'active') && (
+                                    <tbody>
                                         <tr>
-                                            <th>Размещено</th>
-                                            <td>{product?.created_at}</td>
+                                            <th>В избранном</th>
+                                            <td>0</td>
                                         </tr>
-                                </tbody>
-                            )}
-                        </table>
-                        {(product?.status === 'active') && (
-                            <>
-                                <button className='btn'>Продать быстрее</button>
-                                <button className='btn' onClick={openModal}>Снять с публикации</button>
-                                <UnpublishModal
-                                    isOpen={modalIsOpen}
-                                    onClose={closeModal}
-                                    product={product}
-                                    onAction={handleSetStatusProduct}
-                                    loading={loading}
-                                />
-                            </>
+                                        <tr>
+                                            <th>Просмотры</th>
+                                            <td>0</td>
+                                        </tr>
+                                            <tr>
+                                                <th>Размещено</th>
+                                                <td>{product?.created_at}</td>
+                                            </tr>
+                                    </tbody>
+                                )}
+                            </table>
                         )}
-                        {(product?.status === 'inactive') && (
-                            <>
-                                <button className='btn' 
-                                    onClick={() => handleSetStatusProduct(product?.id, 'active')}>Опубликовать повторно</button>
-                            </> 
+                        {isOwner && (
+                            <div>
+                                {(product?.status === 'active') && (
+                                    <>
+                                        <button className='btn'>Продать быстрее</button>
+                                        <button className='btn' onClick={openModal}>Снять с публикации</button>
+                                        <UnpublishModal
+                                            isOpen={modalIsOpen}
+                                            onClose={closeModal}
+                                            product={product}
+                                            onAction={handleSetStatusProduct}
+                                            loading={loading}
+                                        />
+                                    </>
+                                )}
+                                {(product?.status === 'inactive') && (
+                                    <>
+                                        <button className='btn' 
+                                            onClick={() => handleSetStatusProduct(product?.id, 'active')}>Опубликовать повторно</button>
+                                    </> 
+                                )}
+                            </div>
                         )}
                     </div>
                 </div>
