@@ -16,7 +16,7 @@ export default function ProductCard({
         if (e.target.closest('.profile-item__menu')) {
             return;
         }
-        navigate(`/${item.category.slug}/${item.subcategory.slug}/${item.ulid}`);
+        navigate(item.url);
     };
 
     return (

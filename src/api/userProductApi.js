@@ -17,13 +17,6 @@ export const userProductApi = createApi({
     }),
     tagTypes: ['Product'], // Теги для кэширования
     endpoints: (builder) => ({
-        getProductById: builder.query({
-            query: (ulid) => ({
-                url: `/user/product/${ulid}`,
-                method: 'GET',
-            }),
-            providesTags: ['Product'],
-        }),
         getUserProductAll: builder.query({
             query: () => ({
                 url: '/user/product',

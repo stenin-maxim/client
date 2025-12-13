@@ -42,7 +42,13 @@ export const productApi = createApi({
                 }
             },
         }),
+        getProductByUlid: builder.query({
+            query: ({ulid}) => ({
+                url: `/product/${ulid}`,
+                method: 'GET',
+            }),
+        }),
     })
 })
 
-export const { useGetProductsQuery } = productApi;
+export const { useGetProductsQuery, useGetProductByUlidQuery } = productApi;

@@ -42,7 +42,6 @@ export const {
     setUserProductAll, 
     updateUserProductValue, 
     removeUserProduct, 
-    getUserProductById,
     updateUserProduct,
     addUserProduct
 } = userProductSlice.actions;

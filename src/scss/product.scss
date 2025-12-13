@@ -143,7 +143,6 @@
         @include product-input;
         width: 400px;
         font-size: 15px;
-        margin-right: 10px;
     }
     &-price, &-amount {
         @include product-input;
@@ -152,6 +151,40 @@
     }
     &-amount {
         width: 70px;
+    }
+    .btn-location-clear {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #999;
+    }
+    .location-list {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 1000;
+        margin-top: 4px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .location-item {
+        padding: 10px 15px;
+        cursor: pointer;
+        border-bottom: 1px solid #eee;
+        list-style: none;
+        &:hover {
+            background: #ebebeb;
+        }
     }
     .hint {
         display: block;

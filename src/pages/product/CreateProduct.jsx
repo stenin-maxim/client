@@ -582,15 +582,6 @@ export default function CreateProduct() {
                             name="location"
                             value={locationInput}
                             onChange={handleLocationChange}
-                            onFocus={() => {
-                                if (locationInput.length >= 2 && filteredLocations.length > 0) {
-                                    setShowLocationList(true);
-                                }
-                            }}
-                            onBlur={() => {
-                                // Закрываем список с небольшой задержкой, чтобы успел сработать onClick
-                                setTimeout(() => setShowLocationList(false), 200);
-                            }}
                             placeholder="Введите город"
                             maxLength={50}
                             id="location"
@@ -600,48 +591,18 @@ export default function CreateProduct() {
                             <button 
                                 type="button"
                                 onClick={handleLocationClear}
-                                style={{
-                                    position: 'absolute',
-                                    right: '10px',
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    background: 'none',
-                                    border: 'none',
-                                    fontSize: '20px',
-                                    cursor: 'pointer',
-                                    color: '#999'
-                                }}
+                                className="btn-location-clear"
                             >
                                 &times;
                             </button>
                         )}
                         {showLocationList && filteredLocations.length > 0 && (
-                            <ul style={{
-                                position: 'absolute',
-                                top: '100%',
-                                left: 0,
-                                right: 0,
-                                background: 'white',
-                                border: '1px solid #ddd',
-                                borderRadius: '4px',
-                                maxHeight: '200px',
-                                overflowY: 'auto',
-                                zIndex: 1000,
-                                marginTop: '4px',
-                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-                            }}>
+                            <ul className='location-list'>
                                 {filteredLocations.map((item) => (
                                     <li
                                         key={item.id}
                                         onClick={() => handleLocationSelect(item)}
-                                        style={{
-                                            padding: '10px 15px',
-                                            cursor: 'pointer',
-                                            borderBottom: '1px solid #eee',
-                                            listStyle: 'none'
-                                        }}
-                                        onMouseEnter={(e) => e.target.style.background = '#f5f5f5'}
-                                        onMouseLeave={(e) => e.target.style.background = 'white'}
+                                        className='location-item'
                                     >
                                         {item.city} {item.region ? `(${item.region})` : ''}
                                     </li>

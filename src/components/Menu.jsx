@@ -54,13 +54,13 @@ export default function Menu() {
                 onMouseLeave={hideSubcategory}
                 style={{backgroundImage: "url(" + item.icon + ")"}}
             >
-                <Link to={`/${cityUser.slug}/${item.slug}`}>{item.name}</Link>
+                <Link to={`/${cityUser.slug}/${item.slug}`} onClick={toggle}>{item.name}</Link>
                 <ul className={`menu-subcategory ${activeCategory === index ? 'active' : ''}`}>
                     <h4>{item.name}</h4>
                     {item.subcategories.map((subItem) => {
                         return (
                             <li key={subItem.id}>
-                                <Link to={`/${cityUser.slug}/${item.slug}/${subItem.slug}`}>
+                                <Link to={`/${cityUser.slug}/${item.slug}/${subItem.slug}`} onClick={toggle}>
                                     {subItem.name}
                                 </Link>
                             </li>
