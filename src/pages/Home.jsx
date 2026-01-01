@@ -2,14 +2,15 @@ import { useRef, useEffect } from 'react'
 import { Link, useParams, useNavigate } from 'react-router'
 import { useSelector } from 'react-redux'
 import { useGetCategoriesQuery } from '@/api/categoriesApi'
-import { useGetProductsQuery } from '@/api/productApi'
+import { useGetProductsQuery, useToggleFavoriteMutation } from '@/api/productApi'
 
 export default function Home() {
     const categoriesScrollRef = useRef(null);
     const { categories } = useSelector(state => state.categories);
-    const { products: products, loading: productsLoading, error: productsError } = useSelector(state => state.product);
+    const { products, error: productsError } = useSelector(state => state.product);
     const { cityUser } = useSelector(state => state.location);
     const { city, category, subcategory } = useParams();
+    const [toggleFavorite] = useToggleFavoriteMutation();
     const navigate = useNavigate();
 
     // Редирект, если cityUser установлен, но в URL нет city
@@ -20,7 +21,6 @@ export default function Home() {
     }, [cityUser, city, navigate]);
 
     useGetCategoriesQuery(); // Загружаем категории при монтировании компонента
-    
     useGetProductsQuery({
         city: city || null,
         category: category || null,
@@ -42,6 +42,17 @@ export default function Home() {
             categoriesScrollRef.current.scrollBy({ left: 600, behavior: 'smooth' });
         }
     };
+
+    const handleFavorite = async (e, ulid) => {
+        e.stopPropagation(); // 1. Останавливаем всплытие события к родителю (тегу <a>)
+        e.preventDefault(); // 2. На всякий случай предотвращаем действие по умолчанию
+        
+        try {
+            await toggleFavorite({product_ulid: ulid}).unwrap();
+        } catch (err) {
+            console.error("Ошибка при смене статуса избранного:", err);
+        }
+    }
 
     return (
         <>
@@ -84,7 +95,6 @@ export default function Home() {
                     <h2 className="mb-3">Все обьявления</h2>
                     <div className="col-10">
                         <div className="row">
-                            {productsLoading && <div>Загрузка...</div>}
                             {productsError && <div>Ошибка: {productsError}</div>}
                             {products && products.map((item) => (
                                 <div key={item.id} className="col-3" style={{ display: 'flex', marginBottom: '20px' }}>
@@ -99,7 +109,10 @@ export default function Home() {
                                                     }}
                                                 />
                                                 <span className="location">{item.location.city}</span>
-                                                <i className="bi bi-heart" title="Добавить в избранное"></i>
+                                                <i className={`bi ${item.is_favorite ? 'bi-heart-fill' : 'bi-heart'}`}
+                                                    title={item.is_favorite ? "Удалить из избранного" : "Добавить в избранное"}
+                                                    onClick={(e) => handleFavorite(e, item.ulid)}>
+                                                </i>
                                             </div>
                                             <div className="price">{item.price}</div>
                                             <div className="title">{item.name}</div>

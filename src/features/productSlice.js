@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { productApi } from '@/api/productApi';
 
 const productSlice = createSlice({
     name: "product",
@@ -8,20 +9,29 @@ const productSlice = createSlice({
         error: null
     },
     reducers: {
-        setProducts: (state, action) => {
-            state.products = action.payload;
-            state.loading = false;
-            state.error = null;
-        },
-        setProductsLoading: (state, action) => {
-            state.loading = action.payload;
-        },
-        setProductsError: (state, action) => {
-            state.error = action.payload;
-            state.loading = false;
+        toggleProductFavorite: (state, action) => {
+            const product = state.products.find(p => p.ulid === action.payload.product_ulid);
+            if (product) {
+                product.is_favorite = !product.is_favorite;
+            }
         },
     },
+    extraReducers: (builder) => {
+        builder.addMatcher(
+            productApi.endpoints.getProducts.matchFulfilled,
+            (state, action) => {
+                state.products = action.payload.data || action.payload;
+                state.loading = false;
+            }
+        );
+        builder.addMatcher(
+            productApi.endpoints.getProducts.matchPending,
+            (state) => {
+                state.loading = true;
+            }
+        );
+    }
 })
 
-export const { setProducts, setProductsLoading, setProductsError } = productSlice.actions;
+export const { toggleProductFavorite } = productSlice.actions;
 export default productSlice.reducer;
