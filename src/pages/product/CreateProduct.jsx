@@ -150,7 +150,7 @@ export default function CreateProduct() {
         }
 
         // Валидация подкатегории
-        if (productData.category !== "Выберите категорию" && productData.subcategory === "Выберите подкатегорию") {
+        if (productData.category !== "Выберите категорию" && productData.subcategoryName === "Выберите подкатегорию") {
             newErrors.subcategory = "Выберите подкатегорию";
         }
 

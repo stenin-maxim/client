@@ -7,7 +7,7 @@ const userProductSlice = createSlice({
         setUserProductAll(state, action) {
             state.userProducts = action.payload;
         },
-        updateUserProductValue(state, action) {
+        updateUserProductStatus(state, action) { // TODO
             const { id, value } = action.payload; 
             const updateValue = state.userProducts.find(item => item.id === id);
             if (updateValue) {
@@ -18,7 +18,7 @@ const userProductSlice = createSlice({
             let userProductId = action.payload;
             state.userProducts = state.userProducts.filter(item => item.id !== userProductId);
         },
-        updateUserProduct(state, action) {
+        updateUserProduct(state, action) { // TODO
             const { id, updatedProduct } = action.payload;
             const index = state.userProducts.findIndex(item => item.id === id);
             
@@ -40,7 +40,7 @@ const userProductSlice = createSlice({
 })
 export const { 
     setUserProductAll, 
-    updateUserProductValue, 
+    updateUserProductStatus, 
     removeUserProduct, 
     updateUserProduct,
     addUserProduct

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useStatusProductMutation, useDeleteUserProductMutation } from '../api/userProductApi';
-import { updateUserProductValue, removeUserProduct } from '../features/userProduct/userProductSlice';
+import { updateUserProductStatus, removeUserProduct } from '../features/userProduct/userProductSlice';
 
 export const useProductActions = () => {
     const dispatch = useDispatch();
@@ -13,7 +13,7 @@ export const useProductActions = () => {
         setLoading(true);
         try {
             const result = await statusProduct({productId, status}).unwrap();
-            dispatch(updateUserProductValue({ id: productId, value: result.data.status }));
+            dispatch(updateUserProductStatus({ id: productId, value: result.data.status }));
             alert(result.message);
             return result;
         } catch (error) {

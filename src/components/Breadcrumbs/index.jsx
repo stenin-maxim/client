@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { Link, useLocation, useParams } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import "./style.scss";
 
 export default function Breadcrumbs() {
@@ -28,7 +28,7 @@ export default function Breadcrumbs() {
         <nav>
             <ul className="breadcrumb">
                 <li className="breadcrumb-item">
-                    <Link to="/">Главная</Link>    
+                    <Link to="">Главная</Link>    
                 </li>
                 {pathnames.map((pathname, index) => {
                     const path = `/${pathnames.slice(0, index + 1).join('/')}`;
