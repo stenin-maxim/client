@@ -74,6 +74,33 @@
         }
     }
 
+    .favorite {
+        cursor: pointer;
+        &:hover {
+            color: $blue;
+        }
+        span {
+            text-decoration: underline;
+            position: relative;
+            bottom: 2px;
+            font-size: 15px;
+        }
+    }
+
+    .bi-heart, .bi-heart-fill {
+        padding: 9px 10px;
+        border-radius: 21px;
+        font-size: 21px;
+        transition: transform 0.2s ease;
+        &:hover {
+            opacity: 0.9;
+            transform: scale(1.2); // Эффект при наведении
+        }
+    }
+    .bi-heart-fill {
+        color: $red;
+    }
+
     .badge {
         position: relative;
     }

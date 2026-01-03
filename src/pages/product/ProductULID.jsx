@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router';
-import { useGetProductByUlidQuery } from '@/api/productApi';
+import { useGetProductByUlidQuery, useToggleFavoriteMutation } from '@/api/productApi';
 import ImageGallery from '@/components/ImageGallery';
 import UnpublishModal from '@/components/modal/UnpublishModal';
 import { useUnpublishModal } from '@/hooks/useUnpublishModal';
@@ -9,16 +9,15 @@ import { Link } from 'react-router';
 
 export default function ProductULID() {
     const { ulid } = useParams();
-    const navigate = useNavigate();
     const { setStatusProduct, deleteProduct, loading } = useProductActions();
     const { modalIsOpen, openModal, closeModal } = useUnpublishModal();
-    const productFromState = useSelector(state => state.userProduct.userProducts || []).find(p => String(p.ulid) === String(ulid));
+    const { isFetching, isError } = useGetProductByUlidQuery({ulid});
+    const [toggleFavorite] = useToggleFavoriteMutation();
+    const navigate = useNavigate();
+    const product = useSelector(state => state.product.products.find(p => String(p.ulid) === String(ulid)));
     const currentUser = useSelector(state => state.auth.user); // Получить текущего авторизованного пользователя
-    const { data: apiResp, isFetching, isError } = useGetProductByUlidQuery({ulid}, {
-        skip: !!productFromState // Получить данные из кэша, если возможно, иначе сделать запрос к API
-    });
-    const apiProduct = apiResp?.data || apiResp || null;
-    const product = productFromState || apiProduct;
+    const isOwner = currentUser && product && currentUser.id === product.user_id;
+
     const handleSetStatusProduct = async (productId, status) => {
         try {
             await setStatusProduct(productId, status);
@@ -38,10 +37,20 @@ export default function ProductULID() {
         navigate('/profile');
     }
 
-    const isOwner = currentUser && product && currentUser.id === product.user_id;
 
-    if (!product && isFetching) return <>Загрузка...</>;
-    if (!product && isError) return <>Ошибка загрузки</>;
+    if (isFetching && !product) return <>Загрузка...</>;
+    if (isError && !product) return <>Ошибка загрузки</>;
+
+    const handleFavorite = async (e, product_ulid) => {
+        e.stopPropagation(); // 1. Останавливаем всплытие события к родителю (тегу <a>)
+        e.preventDefault(); // 2. На всякий случай предотвращаем действие по умолчанию
+        
+        try {
+            await toggleFavorite({product_ulid}).unwrap();
+        } catch (err) {
+            console.error("Ошибка при смене статуса избранного:", err);
+        }
+    }
 
     return (
         <>
@@ -62,6 +71,15 @@ export default function ProductULID() {
                                     )}
                                 </div>
                             )}
+                            {!isOwner && currentUser && (
+                                <div className='favorite' onClick={(e) => handleFavorite(e, product.ulid)}>
+                                    <i className={`bi ${product.is_favorite ? 'bi-heart-fill' : 'bi-heart'}`}
+                                        title={product.is_favorite ? "Удалить из избранного" : "Добавить в избранное"}
+                                    >
+                                    </i>
+                                    <span>{product.is_favorite ? "Удалить из избранного" : "Добавить в избранное"}</span>
+                                </div>
+                            )}
                         </div>
                         <div className="badge">
                             {(product?.status === 'inactive') && (<div className="inactive-text" >Приостановлено</div>)}
@@ -72,7 +90,7 @@ export default function ProductULID() {
                             <li>
                                 <dl>
                                     <dt>Местоположение</dt>
-                                    <dd>{product?.location.city}</dd>
+                                    <dd>{product?.location?.city}</dd>
                                 </dl>
                             </li>
                             <li>
@@ -84,11 +102,11 @@ export default function ProductULID() {
                             <li>
                                 <dl>
                                     <dt>Категория</dt>
-                                    <dd>{product?.category.name}</dd>
+                                    <dd>{product?.category?.name}</dd>
                                 </dl>
                                 <dl>
                                     <dt>Подкатегория</dt>
-                                    <dd>{product?.subcategory.name}</dd>
+                                    <dd>{product?.subcategory?.name}</dd>
                                 </dl>
                                 <dl>
                                     <dt>Состояние товара</dt>
@@ -99,7 +117,7 @@ export default function ProductULID() {
                     </div>
                     <div className="col-3">
                         <div className='product-user__header'>
-                            <h2 className='price'>{product?.price.toLocaleString('ru-RU')}</h2>
+                            <h2 className='price'>{product?.price?.toLocaleString('ru-RU')}</h2>
                         </div>
                         {isOwner && (
                             <table>

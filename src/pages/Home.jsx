@@ -7,11 +7,12 @@ import { useGetProductsQuery, useToggleFavoriteMutation } from '@/api/productApi
 export default function Home() {
     const categoriesScrollRef = useRef(null);
     const { categories } = useSelector(state => state.categories);
-    const { products, error: productsError } = useSelector(state => state.product);
+    const { products, loading: productsLoading, error: productsError } = useSelector(state => state.product);
     const { cityUser } = useSelector(state => state.location);
     const { city, category, subcategory } = useParams();
     const [toggleFavorite] = useToggleFavoriteMutation();
     const navigate = useNavigate();
+    const isAuthenticated = localStorage.getItem('accessToken');
 
     // Редирект, если cityUser установлен, но в URL нет city
     useEffect(() => {
@@ -95,6 +96,7 @@ export default function Home() {
                     <h2 className="mb-3">Все обьявления</h2>
                     <div className="col-10">
                         <div className="row">
+                            {productsLoading && <div>Загрузка</div>}
                             {productsError && <div>Ошибка: {productsError}</div>}
                             {products && products.map((item) => (
                                 <div key={item.id} className="col-3" style={{ display: 'flex', marginBottom: '20px' }}>
@@ -109,10 +111,12 @@ export default function Home() {
                                                     }}
                                                 />
                                                 <span className="location">{item.location.city}</span>
-                                                <i className={`bi ${item.is_favorite ? 'bi-heart-fill' : 'bi-heart'}`}
-                                                    title={item.is_favorite ? "Удалить из избранного" : "Добавить в избранное"}
-                                                    onClick={(e) => handleFavorite(e, item.ulid)}>
-                                                </i>
+                                                {isAuthenticated && 
+                                                    <i className={`bi ${item.is_favorite ? 'bi-heart-fill' : 'bi-heart'}`}
+                                                        title={item.is_favorite ? "Удалить из избранного" : "Добавить в избранное"}
+                                                        onClick={(e) => handleFavorite(e, item.ulid)}>
+                                                    </i>
+                                                }
                                             </div>
                                             <div className="price">{item.price}</div>
                                             <div className="title">{item.name}</div>

@@ -36,20 +36,21 @@ export const productApi = createApi({
             }),
         }),
         toggleFavorite: builder.mutation({
-            query: (product_ulid) => ({
+            query: ({product_ulid}) => ({
                 url: '/favorites/toggle',
                 method: "POST",
                 body: {product_ulid},
             }),
             invalidatesTags: ['Product'],
             // Мгновенное обновление UI до ответа сервера
-            async onQueryStarted(product_ulid, { dispatch, queryFulfilled }) {
-                const patchResult = dispatch(toggleProductFavorite(product_ulid));
+            async onQueryStarted({product_ulid}, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(toggleProductFavorite({product_ulid}));
+                
                 try {
                     await queryFulfilled;
                 } catch {
                     patchResult.undo(); // Если в слайсе нет undo, просто вызовите toggle еще раз при ошибке
-                    dispatch(toggleProductFavorite(product_ulid));
+                    dispatch(toggleProductFavorite({product_ulid}));
                 }
             },
         }),
