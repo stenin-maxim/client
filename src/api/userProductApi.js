@@ -1,4 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { toggleProductFavorite } from '@/features/productSlice';
+import { addFavorite, removeFavorite } from '@/features/userProduct/userProductSlice';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -6,7 +8,7 @@ export const userProductApi = createApi({
     reducerPath: 'userProductApi', // Путь к редьюсеру для Redux store
     baseQuery: fetchBaseQuery({
         baseUrl: API_URL, // Базовый URL для запросов
-        prepareHeaders: (headers, { getState, endpoint }) => {
+        prepareHeaders: (headers) => {
             const token = localStorage.getItem('accessToken');
             if (token) {
                 headers.set('Authorization', `Bearer ${token}`);
@@ -78,6 +80,39 @@ export const userProductApi = createApi({
                 body: {status: status},
             }),
             invalidatesTags: ['Product'], // Инвалидирует кэш после публикации
+        }),
+
+        toggleFavorite: builder.mutation({
+            query: ({product}) => ({
+                url: '/favorites/toggle',
+                method: "POST",
+                body: {product_ulid: product.ulid},
+            }),
+            invalidatesTags: ['Favorites'],
+            // Мгновенное обновление UI до ответа сервера
+            async onQueryStarted({product}, { dispatch, queryFulfilled }) {
+                dispatch(toggleProductFavorite(product));
+                
+                try {
+                    const { data } = await queryFulfilled; //Ожидаем ответ от сервера
+
+                    if (data.data.is_favorite) {
+                        dispatch(addFavorite(data.data));
+                    } else {
+                        dispatch(removeFavorite(data.data.ulid));
+                    }
+                    
+                } catch {
+                    dispatch(toggleProductFavorite(product));
+                }
+                
+            },
+        }),
+        getFavoriteUserProducts: builder.query({
+            query: () => ({
+                url: '/user/favorites',
+                method: "GET",
+            }),
         })
     }),
 })
@@ -90,4 +125,6 @@ export const {
     useUpdateProductMutation,
     useDeleteUserProductMutation,
     useStatusProductMutation,
+    useToggleFavoriteMutation,
+    useGetFavoriteUserProductsQuery,
 } = userProductApi;

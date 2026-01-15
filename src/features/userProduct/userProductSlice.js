@@ -1,8 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { userProductApi } from '@/api/userProductApi';
 
 const userProductSlice = createSlice({
     name: 'userProduct',
-    initialState: {userProducts: []},
+    initialState: {
+        userProducts: [],
+        favorites: [],
+        loading: false,
+    },
     reducers: {
         setUserProductAll(state, action) {
             state.userProducts = action.payload;
@@ -35,7 +40,27 @@ const userProductSlice = createSlice({
             const newProduct = action.payload;
             // Добавляем новый продукт в начало массива
             state.userProducts = [newProduct, ...state.userProducts];
-        }
+        },
+
+        addFavorite: (state, action) => {
+            const product = action.payload;
+            if (!state.favorites.includes(product.ulid)) {
+                state.favorites.push(product);
+            }
+        },
+        removeFavorite: (state, action) => {
+            const ulid = action.payload;
+            state.favorites = state.favorites.filter(item => item.ulid !== ulid);
+        },
+    },
+    extraReducers: (builder) => {
+        builder.addMatcher(
+            userProductApi.endpoints.getFavoriteUserProducts.matchFulfilled,
+            (state, action) => {
+                state.favorites = action.payload.data;
+                state.loading = false;
+            }
+        )
     }
 })
 export const { 
@@ -43,6 +68,8 @@ export const {
     updateUserProductStatus, 
     removeUserProduct, 
     updateUserProduct,
-    addUserProduct
+    addUserProduct,
+    addFavorite,
+    removeFavorite,
 } = userProductSlice.actions;
 export default userProductSlice.reducer;
