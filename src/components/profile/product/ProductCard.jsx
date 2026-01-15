@@ -30,7 +30,7 @@ export default function ProductCard({
                     <h3>{item.name}</h3>
                     <h4 className="price">{item.price.toLocaleString('ru-RU')}</h4>
                     <div>Кол-во: {item.amount} шт.</div>
-                    <div>{item.location.city}</div>
+                    <div>{item.city}</div>
                 </div>
             </div>
             <div className='profile-item__right'>

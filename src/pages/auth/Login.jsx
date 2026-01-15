@@ -2,22 +2,25 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { setToken, setUser } from '../../features/auth/authSlice'
+import { setToken, setUser } from '@/features/auth/authSlice'
 
 export default function Login() {
     const [isRequestPending, setIsRequestPending] = useState(false);
 	const dispatch = useDispatch();
     const navigate = useNavigate();
-	const { register, handleSubmit, formState: { errors }  } = useForm()
+	const { register, handleSubmit, formState: { errors } } = useForm();
     const baseUrl = import.meta.env.VITE_API_URL;
 
 	const submitForm = async (dataForm) => {
         try {
             if (!isRequestPending) {
                 setIsRequestPending(true);
-                const response = await fetch(`${baseUrl}auth/login`, {
+                const response = await fetch(`${baseUrl}/auth/login`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                     },
                     body: JSON.stringify(dataForm),
                 })
     

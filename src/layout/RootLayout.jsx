@@ -1,15 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router'
 import { useSelector, useDispatch } from "react-redux"
-import { logout } from '../features/auth/authSlice'
-import LocationModal from '../components/modal/LocationModal';
-import Menu from '../components/Menu';
-import SearchForm from '../components/form/SearchForm';
-import Avatar from '../components/Avatar/Avatar';
-import { getAvatar } from '../api/userApi';
-import { setAvatar } from '../features/auth/authSlice';
+import { logout } from '@/features/auth/authSlice'
+import LocationModal from '@/components/modal/LocationModal';
+import Menu from '@/components/Menu';
+import SearchForm from '@/components/form/SearchForm';
+import Avatar from '@/components/Avatar/Avatar';
+import { getAvatar } from '@/api/userApi';
+import { setAvatar } from '@/features/auth/authSlice';
+import { useGetFavoriteUserProductsQuery } from '@/api/userProductApi';
 
 export default function RootLayout() {
+    useGetFavoriteUserProductsQuery();
     const [isVisibleMenuUser, setIsVisibleMenuUser] = useState(false);
     const [isRequestPending, setIsRequestPending] = useState(false);
     const accessToken = useSelector((state) => state.auth.accessToken)
@@ -20,6 +22,7 @@ export default function RootLayout() {
     const navigate = useNavigate();
     const baseUrl = import.meta.env.VITE_API_URL;
     const APP_NAME = import.meta.env.VITE_APP_NAME;
+    const countFavorites = useSelector((state) => state.userProduct.favorites.length);
 
     async function handleLogout() {
         try {
@@ -113,9 +116,20 @@ export default function RootLayout() {
                                             <Link to="register">Регистрация</Link>
                                         </div> : 
                                         <div>
-                                            <Link to="message" className="icon-text"><i className="bi bi-chat-fill" title="Сообщения"></i><span>Сообщения</span></Link>
-                                            <Link to="favorites" className="icon-text"><i className="bi bi-heart-fill" title="Избранное"></i><span>Избранное</span></Link>
-                                            <Link to="notifi" className="icon-text"><i className="bi bi-bell-fill" title="Уведомления"></i><span>Уведомления</span></Link>
+                                            <Link to="message" className="icon-text">
+                                                <i className="bi bi-chat-fill" title="Сообщения"></i>
+                                                <span>Сообщения</span>
+                                            </Link>
+                                            <Link to="favorites" className="icon-text">
+                                                <i className={`bi bi-heart-fill ${countFavorites ? 'heart' : '' }`} title="Избранное">
+                                                    <sub>{countFavorites ? countFavorites : ''}</sub>
+                                                </i>
+                                                <span>Избранное</span>
+                                            </Link>
+                                            <Link to="notifi" className="icon-text">
+                                                <i className="bi bi-bell-fill" title="Уведомления"></i>
+                                                <span>Уведомления</span>
+                                            </Link>
                                         </div>     
                                     }
                                 </div>

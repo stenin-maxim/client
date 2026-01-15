@@ -22,7 +22,7 @@ export default function Register() {
 
         if (!isRequestPending) {
             setIsRequestPending(true);
-            const response = await fetch(`${baseUrl}auth/register`, {
+            const response = await fetch(`${baseUrl}/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dataForm),

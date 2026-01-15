@@ -2,7 +2,8 @@ import { useRef, useEffect } from 'react'
 import { Link, useParams, useNavigate } from 'react-router'
 import { useSelector } from 'react-redux'
 import { useGetCategoriesQuery } from '@/api/categoriesApi'
-import { useGetProductsQuery, useToggleFavoriteMutation } from '@/api/productApi'
+import { useGetProductsQuery } from '@/api/productApi'
+import { useFavoriteHandler } from '@/hooks/useFavoriteHandler';
 
 export default function Home() {
     const categoriesScrollRef = useRef(null);
@@ -10,14 +11,15 @@ export default function Home() {
     const { products, loading: productsLoading, error: productsError } = useSelector(state => state.product);
     const { cityUser } = useSelector(state => state.location);
     const { city, category, subcategory } = useParams();
-    const [toggleFavorite] = useToggleFavoriteMutation();
     const navigate = useNavigate();
     const isAuthenticated = localStorage.getItem('accessToken');
+    const { handleFavorite } = useFavoriteHandler();
 
     // Редирект, если cityUser установлен, но в URL нет city
     useEffect(() => {
+        
         if (cityUser?.slug && !city) {
-            navigate(`/${cityUser.slug}`, { replace: true });
+            navigate(`/${cityUser?.slug}`, { replace: true });
         }
     }, [cityUser, city, navigate]);
 
@@ -44,15 +46,14 @@ export default function Home() {
         }
     };
 
-    const handleFavorite = async (e, ulid) => {
-        e.stopPropagation(); // 1. Останавливаем всплытие события к родителю (тегу <a>)
-        e.preventDefault(); // 2. На всякий случай предотвращаем действие по умолчанию
-        
-        try {
-            await toggleFavorite({product_ulid: ulid}).unwrap();
-        } catch (err) {
-            console.error("Ошибка при смене статуса избранного:", err);
+    const url = (itemSlug) => {
+        const city = cityUser?.slug;
+
+        if (city) {
+            return `/${city}/${itemSlug}`;
         }
+
+        return `/${itemSlug}`;
     }
 
     return (
@@ -72,7 +73,7 @@ export default function Home() {
                             {categories.map((item) => {
                                 return (
                                     <div key={item.id} className="home-category-item">
-                                        <Link to={`/${cityUser.slug}/${item.slug}`}>
+                                        <Link to={url(item.slug)}>
                                             <img className="img-category"
                                                 src={item.img}
                                                 alt={item.name}
@@ -99,22 +100,22 @@ export default function Home() {
                             {productsLoading && <div>Загрузка</div>}
                             {productsError && <div>Ошибка: {productsError}</div>}
                             {products && products.map((item) => (
-                                <div key={item.id} className="col-3" style={{ display: 'flex', marginBottom: '20px' }}>
+                                <div key={item.ulid} className="col-3" style={{ display: 'flex', marginBottom: '20px' }}>
                                     <div className="home-product">
                                         <a href={item.url} >
                                             <div className="image-wrapper">
                                                 <img 
-                                                    src={item.product_image?.[0]?.url} 
+                                                    src={item.image} 
                                                     alt={item.name}
                                                     onError={(e) => {
                                                         e.target.src = '#';
                                                     }}
                                                 />
-                                                <span className="location">{item.location.city}</span>
+                                                <span className="location">{item.city}</span>
                                                 {isAuthenticated && 
                                                     <i className={`bi ${item.is_favorite ? 'bi-heart-fill' : 'bi-heart'}`}
                                                         title={item.is_favorite ? "Удалить из избранного" : "Добавить в избранное"}
-                                                        onClick={(e) => handleFavorite(e, item.ulid)}>
+                                                        onClick={(e) => handleFavorite(e, item)}>
                                                     </i>
                                                 }
                                             </div>

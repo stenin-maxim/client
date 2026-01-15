@@ -18,13 +18,12 @@
     }
     .icon-text {
     	margin-left: 30px;
-    	text-decoration: underline;
         color: $white;
     	&:hover {
     		color: $pink;
     	}
     	span {
-    		margin-left: 5px;
+    		margin-left: 10px;
     		font-size: 14px;
     	}
     }
@@ -54,6 +53,16 @@
             color: $gray-2;
         }
     }
+    sub {
+        font-style: normal;
+        font-size: 13px;
+        position: relative;
+        top: 2px;
+    }
+}
+
+.heart {
+    color: $red;
 }
 
 .header-bottom {

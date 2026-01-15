@@ -3,7 +3,7 @@ import authReducer from '@/features/auth/authSlice';
 import userProductReducer from '@/features/userProduct/userProductSlice';
 import categoriesReducer from '@/features/categories/categoriesSlice';
 import productReducer from '@/features/productSlice';
-import locationReducer from '@/features/locationSlice'; 
+import locationReducer from '@/features/locationSlice';
 import { productApi } from '@/api/productApi';
 import { userProductApi } from '@/api/userProductApi';
 import { categoriesApi } from '@/api/categoriesApi';
@@ -11,19 +11,22 @@ import { locationApi } from '@/api/locationApi';
 
 export const store = configureStore({
 	reducer: {
+        // Обычные слайсы
         auth: authReducer,
         userProduct: userProductReducer,
         categories: categoriesReducer,
         product: productReducer,
         location: locationReducer,
+
+        // Добавляем редьюсер RTK Query
+        // reducerPath по умолчанию 'productApi'
         [productApi.reducerPath]: productApi.reducer,
-        [userProductApi.reducerPath]: userProductApi.reducer, // Добавляем редьюсер RTK Query
+        [userProductApi.reducerPath]: userProductApi.reducer,
         [categoriesApi.reducerPath]: categoriesApi.reducer,
         [locationApi.reducerPath]: locationApi.reducer,
-        // другие редьюсеры
     },
     // Добавляем middleware для RTK Query
-    middleware: (getDefaultMiddleware) => 
+    middleware: (getDefaultMiddleware) => // Middleware необходим для работы кэширования, инвалидации и onQueryStarted
         getDefaultMiddleware().concat(
             productApi.middleware,
             userProductApi.middleware,

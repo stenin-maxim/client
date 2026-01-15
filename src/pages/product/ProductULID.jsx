@@ -1,22 +1,23 @@
 import { useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router';
-import { useGetProductByUlidQuery, useToggleFavoriteMutation } from '@/api/productApi';
+import { useGetProductByUlidQuery } from '@/api/productApi';
 import ImageGallery from '@/components/ImageGallery';
 import UnpublishModal from '@/components/modal/UnpublishModal';
 import { useUnpublishModal } from '@/hooks/useUnpublishModal';
 import { useProductActions } from '@/hooks/useProductActions';
 import { Link } from 'react-router';
+import { useFavoriteHandler } from '@/hooks/useFavoriteHandler';
 
 export default function ProductULID() {
     const { ulid } = useParams();
     const { setStatusProduct, deleteProduct, loading } = useProductActions();
     const { modalIsOpen, openModal, closeModal } = useUnpublishModal();
     const { isFetching, isError } = useGetProductByUlidQuery({ulid});
-    const [toggleFavorite] = useToggleFavoriteMutation();
     const navigate = useNavigate();
     const product = useSelector(state => state.product.products.find(p => String(p.ulid) === String(ulid)));
     const currentUser = useSelector(state => state.auth.user); // Получить текущего авторизованного пользователя
     const isOwner = currentUser && product && currentUser.id === product.user_id;
+    const { handleFavorite } = useFavoriteHandler();
 
     const handleSetStatusProduct = async (productId, status) => {
         try {
@@ -41,17 +42,6 @@ export default function ProductULID() {
     if (isFetching && !product) return <>Загрузка...</>;
     if (isError && !product) return <>Ошибка загрузки</>;
 
-    const handleFavorite = async (e, product_ulid) => {
-        e.stopPropagation(); // 1. Останавливаем всплытие события к родителю (тегу <a>)
-        e.preventDefault(); // 2. На всякий случай предотвращаем действие по умолчанию
-        
-        try {
-            await toggleFavorite({product_ulid}).unwrap();
-        } catch (err) {
-            console.error("Ошибка при смене статуса избранного:", err);
-        }
-    }
-
     return (
         <>
             <div className="product-user">
@@ -72,7 +62,7 @@ export default function ProductULID() {
                                 </div>
                             )}
                             {!isOwner && currentUser && (
-                                <div className='favorite' onClick={(e) => handleFavorite(e, product.ulid)}>
+                                <div className='favorite' onClick={(e) => handleFavorite(e, product)}>
                                     <i className={`bi ${product.is_favorite ? 'bi-heart-fill' : 'bi-heart'}`}
                                         title={product.is_favorite ? "Удалить из избранного" : "Добавить в избранное"}
                                     >

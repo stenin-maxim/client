@@ -45,6 +45,23 @@ export default function Menu() {
         );
     }
 
+    const url = (itemSlug, subItemSlug) => {
+        const city = cityUser?.slug;
+
+        if (city) {
+            if (subItemSlug) {
+                return `/${city}/${itemSlug}/${subItemSlug}`;
+            }
+            return `/${city}/${itemSlug}`;
+        }
+
+        if (subItemSlug) {
+            return `/${itemSlug}/${subItemSlug}`;
+        }
+
+        return `/${itemSlug}`;
+    }
+
     let listCategory = categories.map((item, index) => {
         return (
             <li 
@@ -54,13 +71,13 @@ export default function Menu() {
                 onMouseLeave={hideSubcategory}
                 style={{backgroundImage: "url(" + item.icon + ")"}}
             >
-                <Link to={`/${cityUser.slug}/${item.slug}`} onClick={toggle}>{item.name}</Link>
+                <Link to={url(item.slug)} onClick={toggle}>{item.name}</Link>
                 <ul className={`menu-subcategory ${activeCategory === index ? 'active' : ''}`}>
                     <h4>{item.name}</h4>
                     {item.subcategories.map((subItem) => {
                         return (
                             <li key={subItem.id}>
-                                <Link to={`/${cityUser.slug}/${item.slug}/${subItem.slug}`} onClick={toggle}>
+                                <Link to={url(item.slug, subItem.slug)} onClick={toggle}>
                                     {subItem.name}
                                 </Link>
                             </li>

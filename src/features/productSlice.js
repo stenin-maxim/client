@@ -10,12 +10,10 @@ const productSlice = createSlice({
     },
     reducers: {
         toggleProductFavorite: (state, action) => {
-            const product = state.products.find(p => p.ulid === action.payload.product_ulid);
+            const product = state.products.find(p => p.ulid === action.payload.ulid);
             
             if (product) {
                 product.is_favorite = !product.is_favorite;
-            } else {
-                console.warn("Продукт не найден в стейте, невозможно переключить избранное");
             }
         },
     },
